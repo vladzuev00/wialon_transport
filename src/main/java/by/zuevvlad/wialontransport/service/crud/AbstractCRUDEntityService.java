@@ -7,10 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractCRUDEntityService<EntityType extends Entity> implements CRUDEntityService<EntityType> {
-    protected final EntityRepository<EntityType> entityRepository;
+public abstract class AbstractCRUDEntityService<EntityType extends Entity, EntityRepositoryType extends EntityRepository<EntityType>>
+        implements CRUDEntityService<EntityType> {
+    protected final EntityRepositoryType entityRepository;
 
-    public AbstractCRUDEntityService(final EntityRepository<EntityType> entityRepository) {
+    public AbstractCRUDEntityService(final EntityRepositoryType entityRepository) {
         this.entityRepository = entityRepository;
     }
 
