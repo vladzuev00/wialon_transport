@@ -2,7 +2,7 @@ package by.zuevvlad.wialontransport.kafka.serializer;
 
 import by.zuevvlad.wialontransport.kafka.amountbytesfounder.AmountDataBytesFounder;
 import by.zuevvlad.wialontransport.kafka.amountbytesfounder.AmountObjectBytesFounder;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.apache.kafka.common.serialization.Serializer;
 
 import java.nio.ByteBuffer;
@@ -10,27 +10,27 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.nio.ByteBuffer.allocate;
 
-public final class DataSerializer implements Serializer<Data> {
+public final class DataSerializer implements Serializer<DataEntity> {
     private static final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = ofPattern(DATE_TIME_PATTERN);
 
-    private final AmountObjectBytesFounder<Data> amountDataBytesFounder;
+    private final AmountObjectBytesFounder<DataEntity> amountDataBytesFounder;
 
-    public static Serializer<Data> create() {
+    public static Serializer<DataEntity> create() {
         return SingletonHolder.DATA_SERIALIZER;
     }
 
-    private DataSerializer(final AmountObjectBytesFounder<Data> amountDataBytesFounder) {
+    private DataSerializer(final AmountObjectBytesFounder<DataEntity> amountDataBytesFounder) {
         this.amountDataBytesFounder = amountDataBytesFounder;
     }
 
     @Override
-    public byte[] serialize(final String topic, final Data serializedData) {
+    public byte[] serialize(final String topic, final DataEntity serializedData) {
         final int amountOfBytes = this.amountDataBytesFounder.find(serializedData);
         final ByteBuffer byteBuffer = allocate(amountOfBytes);
         byteBuffer.putLong(serializedData.getId());
@@ -69,6 +69,6 @@ public final class DataSerializer implements Serializer<Data> {
     }
 
     private static final class SingletonHolder {
-        private static final Serializer<Data> DATA_SERIALIZER = new DataSerializer(AmountDataBytesFounder.create());
+        private static final Serializer<DataEntity> DATA_SERIALIZER = new DataSerializer(AmountDataBytesFounder.create());
     }
 }

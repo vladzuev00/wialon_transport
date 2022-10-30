@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.netty.tostringserializer.collection;
 
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.tostringserializer.ExtendedDataToStringSerializer;
 import by.zuevvlad.wialontransport.netty.tostringserializer.ToStringSerializer;
 import by.zuevvlad.wialontransport.propertyfilereader.PropertyFileReader;
@@ -10,15 +10,15 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Properties;
 
-public final class CollectionExtendedDataToStringSerializer extends CollectionToStringSerializer<ExtendedData> {
+public final class CollectionExtendedDataToStringSerializer extends CollectionToStringSerializer<ExtendedDataEntity> {
 
     private CollectionExtendedDataToStringSerializer(
-            final ToStringSerializer<ExtendedData> extendedDataToStringSerializer,
+            final ToStringSerializer<ExtendedDataEntity> extendedDataToStringSerializer,
             final String serializedExtendedDataDelimiter) {
         super(extendedDataToStringSerializer, serializedExtendedDataDelimiter);
     }
 
-    public static ToStringSerializer<Collection<ExtendedData>> create() {
+    public static ToStringSerializer<Collection<ExtendedDataEntity>> create() {
         return SingletonInitializer.COLLECTION_EXTENDED_DATA_TO_STRING_SERIALIZER;
     }
 
@@ -30,15 +30,15 @@ public final class CollectionExtendedDataToStringSerializer extends CollectionTo
         private static final String PROPERTY_KEY_SERIALIZED_DATA_DELIMITER
                 = "netty.serialization.black_box_package.serialized_data_delimiter";
 
-        private static final ToStringSerializer<Collection<ExtendedData>> COLLECTION_EXTENDED_DATA_TO_STRING_SERIALIZER
+        private static final ToStringSerializer<Collection<ExtendedDataEntity>> COLLECTION_EXTENDED_DATA_TO_STRING_SERIALIZER
                 = createCollectionExtendedDataToStringSerializer();
 
-        private static ToStringSerializer<Collection<ExtendedData>> createCollectionExtendedDataToStringSerializer() {
+        private static ToStringSerializer<Collection<ExtendedDataEntity>> createCollectionExtendedDataToStringSerializer() {
             final PropertyFileReader propertyFileReader = PropertyFileReaderImplementation.create();
             final Properties properties = propertyFileReader.read(FILE_NETTY_SERIALIZATION_CONFIGURATION);
             final String serializedExtendedDataDelimiter = properties
                     .getProperty(PROPERTY_KEY_SERIALIZED_DATA_DELIMITER);
-            final ToStringSerializer<ExtendedData> extendedDataToStringSerializer
+            final ToStringSerializer<ExtendedDataEntity> extendedDataToStringSerializer
                     = ExtendedDataToStringSerializer.create();
             return new CollectionExtendedDataToStringSerializer(extendedDataToStringSerializer,
                     serializedExtendedDataDelimiter);

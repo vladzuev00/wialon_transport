@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.service.implementation;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import by.zuevvlad.wialontransport.service.DataSendService;
 import by.zuevvlad.wialontransport.service.NotDeliveredDataSendService;
 import by.zuevvlad.wialontransport.service.datasender.DataSender;
@@ -20,7 +20,7 @@ public final class DataSendServiceImplementation implements DataSendService {
     }
 
     @Override
-    public void sendData(final Data sentData) {
+    public void sendData(final DataEntity sentData) {
         this.dataSender.sendData(sentData, (metadata, exception) -> {
             if (exception != null) {
                 this.notDeliveredDataSendService.addNotDeliveredData(sentData);

@@ -10,13 +10,13 @@ import by.zuevvlad.wialontransport.dao.resultsetmapper.DataResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.ResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.DataResultRowMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 
 import java.util.logging.Logger;
 
 import static java.util.logging.Logger.getLogger;
 
-public final class DataRepository extends AbstractEntityRepository<Data> {
+public final class DataRepository extends AbstractEntityRepository<DataEntity> {
     private static final String QUERY_TO_SELECT_BY_ID = "SELECT data.id, data.date, data.time, "
             + "data.latitude_degrees, data.latitude_minutes, data.latitude_minute_share, data.latitude_type, "
             + "data.longitude_degrees, data.longitude_minutes, data.longitude_minute_share, data.longitude_type, "
@@ -74,17 +74,17 @@ public final class DataRepository extends AbstractEntityRepository<Data> {
     private static final String QUERY_TO_DELETE_BY_ID = "DELETE FROM data WHERE data.id = ?";
 
     private DataRepository(final DataBaseConnectionPool dataBaseConnectionPool,
-                           final ResultRowMapper<Data> dataResultRowMapper,
-                           final ResultSetMapper<Data> dataResultSetMapper,
+                           final ResultRowMapper<DataEntity> dataResultRowMapper,
+                           final ResultSetMapper<DataEntity> dataResultSetMapper,
                            final FounderGeneratedId<Long> founderGeneratedId,
-                           final EntityInjectorInPreparedStatement<Data> dataInjectorToInsert,
-                           final EntityInjectorInPreparedStatement<Data> dataInjectorToUpdate,
+                           final EntityInjectorInPreparedStatement<DataEntity> dataInjectorToInsert,
+                           final EntityInjectorInPreparedStatement<DataEntity> dataInjectorToUpdate,
                            final Logger logger) {
         super(dataBaseConnectionPool, dataResultRowMapper, dataResultSetMapper, founderGeneratedId,
                 dataInjectorToInsert, dataInjectorToUpdate, logger);
     }
 
-    public static EntityRepository<Data> create() {
+    public static EntityRepository<DataEntity> create() {
         return SingletonHolder.DATA_REPOSITORY;
     }
 
@@ -114,7 +114,7 @@ public final class DataRepository extends AbstractEntityRepository<Data> {
     }
 
     private static final class SingletonHolder {
-        private static final EntityRepository<Data> DATA_REPOSITORY = new DataRepository(
+        private static final EntityRepository<DataEntity> DATA_REPOSITORY = new DataRepository(
                 DataBaseConnectionPoolImplementation.create(), DataResultRowMapper.create(),
                 DataResultSetMapper.create(), FounderGeneratedLongId.create(),
                 new DataInjectorInPreparedStatement(

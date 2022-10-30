@@ -13,7 +13,7 @@ import by.zuevvlad.wialontransport.dao.resultsetmapper.ResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.TrackerResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.TrackerResultRowMapper;
-import by.zuevvlad.wialontransport.entity.Tracker;
+import by.zuevvlad.wialontransport.entity.TrackerEntity;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +26,7 @@ import static java.lang.String.format;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
-public final class TrackerRepository extends AbstractEntityRepository<Tracker> {
+public final class TrackerRepository extends AbstractEntityRepository<TrackerEntity> {
     private static final String QUERY_TO_SELECT_BY_ID = "SELECT trackers.id, trackers.imei, "
             + "trackers.encrypted_password, trackers.phone_number, trackers.user_id FROM trackers "
             + "WHERE trackers.id = ?";
@@ -58,21 +58,21 @@ public final class TrackerRepository extends AbstractEntityRepository<Tracker> {
     private static final int PARAMETER_INDEX_IMEI_IN_QUERY_TO_SELECT_BY_IMEI = 1;
 
     private TrackerRepository(final DataBaseConnectionPool dataBaseConnectionPool,
-                              final ResultRowMapper<Tracker> trackerResultRowMapper,
-                              final ResultSetMapper<Tracker> trackerResultSetMapper,
+                              final ResultRowMapper<TrackerEntity> trackerResultRowMapper,
+                              final ResultSetMapper<TrackerEntity> trackerResultSetMapper,
                               final FounderGeneratedId<Long> founderGeneratedId,
-                              final EntityInjectorInPreparedStatement<Tracker> entityInjectorToInsert,
-                              final EntityInjectorInPreparedStatement<Tracker> entityInjectorToUpdate,
+                              final EntityInjectorInPreparedStatement<TrackerEntity> entityInjectorToInsert,
+                              final EntityInjectorInPreparedStatement<TrackerEntity> entityInjectorToUpdate,
                               final Logger logger) {
         super(dataBaseConnectionPool, trackerResultRowMapper, trackerResultSetMapper, founderGeneratedId,
                 entityInjectorToInsert, entityInjectorToUpdate, logger);
     }
 
-    public static EntityRepository<Tracker> create() {
+    public static EntityRepository<TrackerEntity> create() {
         return SingletonHolder.TRACKER_REPOSITORY;
     }
 
-    public Optional<Tracker> findByImei(final String imei) {
+    public Optional<TrackerEntity> findByImei(final String imei) {
         try {
             final Optional<Connection> optionalConnection = super.dataBaseConnectionPool.findAvailableConnection();
             final Connection connection = optionalConnection.orElseThrow(NoAvailableConnectionInPoolException::new);
@@ -115,7 +115,7 @@ public final class TrackerRepository extends AbstractEntityRepository<Tracker> {
     }
 
     private static final class SingletonHolder {
-        private static final EntityInjectorInPreparedStatement<Tracker> TRACKER_INJECTOR_TO_INSERT
+        private static final EntityInjectorInPreparedStatement<TrackerEntity> TRACKER_INJECTOR_TO_INSERT
                 = new TrackerInjectorInPreparedStatement(
                 PARAMETER_INDEX_IMEI_IN_QUERY_TO_INSERT,
                 PARAMETER_INDEX_ENCRYPTED_PASSWORD_IN_QUERY_TO_INSERT,
@@ -123,7 +123,7 @@ public final class TrackerRepository extends AbstractEntityRepository<Tracker> {
                 PARAMETER_INDEX_USER_ID_IN_QUERY_TO_INSERT,
                 StringToStringCryptographer.create());
 
-        private static final EntityInjectorInPreparedStatement<Tracker> TRACKER_INJECTOR_TO_UPDATE
+        private static final EntityInjectorInPreparedStatement<TrackerEntity> TRACKER_INJECTOR_TO_UPDATE
                 = new TrackerInjectorInPreparedStatement(
                 PARAMETER_INDEX_ID_IN_QUERY_TO_UPDATE,
                 PARAMETER_INDEX_IMEI_IN_QUERY_TO_UPDATE,
@@ -132,7 +132,7 @@ public final class TrackerRepository extends AbstractEntityRepository<Tracker> {
                 PARAMETER_INDEX_USER_ID_IN_QUERY_TO_UPDATE,
                 StringToStringCryptographer.create());
 
-        private static final EntityRepository<Tracker> TRACKER_REPOSITORY = new TrackerRepository(
+        private static final EntityRepository<TrackerEntity> TRACKER_REPOSITORY = new TrackerRepository(
                 DataBaseConnectionPoolImplementation.create(),
                 TrackerResultRowMapper.create(),
                 TrackerResultSetMapper.create(),

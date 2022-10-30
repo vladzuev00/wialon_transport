@@ -8,26 +8,26 @@ import java.util.function.Supplier;
 
 import static java.util.Objects.hash;
 
-public final class Tracker extends Entity {
+public final class TrackerEntity extends Entity {
     public static final String NOT_DEFINED_IMEI = "not defined";
     public static final String NOT_DEFINED_PASSWORD = "not defined";
     public static final String NOT_DEFINED_PHONE_NUMBER = "not_defined";
-    public static final Supplier<User> NOT_DEFINED_USER_SUPPLIER = User::new;
+    public static final Supplier<UserEntity> NOT_DEFINED_USER_SUPPLIER = UserEntity::new;
 
     private String imei;
     private String password;
     private String phoneNumber;
-    private User user;
+    private UserEntity user;
 
-    public Tracker() {
+    public TrackerEntity() {
         this.imei = NOT_DEFINED_IMEI;
         this.password = NOT_DEFINED_PASSWORD;
         this.phoneNumber = NOT_DEFINED_PHONE_NUMBER;
         this.user = NOT_DEFINED_USER_SUPPLIER.get();
     }
 
-    public Tracker(final long id, final String imei, final String password, final String phoneNumber,
-                   final User user) {
+    public TrackerEntity(final long id, final String imei, final String password, final String phoneNumber,
+                         final UserEntity user) {
         super(id);
         this.imei = imei;
         this.password = password;
@@ -59,11 +59,11 @@ public final class Tracker extends Entity {
         return this.phoneNumber;
     }
 
-    public void setUser(final User user) {
+    public void setUser(final UserEntity user) {
         this.user = user;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return this.user;
     }
 
@@ -72,7 +72,7 @@ public final class Tracker extends Entity {
         if (!super.equals(otherObject)) {
             return false;
         }
-        final Tracker other = (Tracker) otherObject;
+        final TrackerEntity other = (TrackerEntity) otherObject;
         return Objects.equals(this.imei, other.imei)
                 && Objects.equals(this.password, other.password)
                 && Objects.equals(this.phoneNumber, other.phoneNumber)
@@ -107,6 +107,6 @@ public final class Tracker extends Entity {
         this.imei = (String) objectInput.readObject();
         this.password = (String) objectInput.readObject();
         this.phoneNumber = (String) objectInput.readObject();
-        this.user = (User) objectInput.readObject();
+        this.user = (UserEntity) objectInput.readObject();
     }
 }

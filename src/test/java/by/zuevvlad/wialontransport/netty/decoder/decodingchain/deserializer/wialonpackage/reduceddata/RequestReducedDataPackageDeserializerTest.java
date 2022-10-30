@@ -3,7 +3,7 @@ package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.wia
 import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.wialonpackage.PackageDeserializer;
 import by.zuevvlad.wialontransport.wialonpackage.Package;
 import by.zuevvlad.wialontransport.wialonpackage.reduceddata.RequestReducedDataPackage;
@@ -14,8 +14,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.junit.Assert.assertEquals;
 
@@ -63,7 +63,7 @@ public final class RequestReducedDataPackageDeserializerTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)

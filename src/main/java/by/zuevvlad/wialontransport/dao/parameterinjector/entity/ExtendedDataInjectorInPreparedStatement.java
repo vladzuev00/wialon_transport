@@ -2,18 +2,18 @@ package by.zuevvlad.wialontransport.dao.parameterinjector.entity;
 
 import by.zuevvlad.wialontransport.dao.parameterinjector.exception.InjectionParameterPreparedStatementException;
 import by.zuevvlad.wialontransport.dao.serializer.Serializer;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
-import by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public final class ExtendedDataInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<ExtendedData> {
+public final class ExtendedDataInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<ExtendedDataEntity> {
     private final Serializer<double[]> analogInputsSerializer;
     private final Serializer<List<Parameter>> parametersSerializer;
-    private final EntityInjectorInPreparedStatement<Data> dataInjector;
+    private final EntityInjectorInPreparedStatement<DataEntity> dataInjector;
     private final int parameterIndexReductionPrecision;
     private final int parameterIndexInputs;
     private final int parameterIndexOutputs;
@@ -100,7 +100,7 @@ public final class ExtendedDataInjectorInPreparedStatement extends EntityInjecto
     }
 
     @Override
-    public void inject(final ExtendedData injectedExtendedData, final PreparedStatement preparedStatement) {
+    public void inject(final ExtendedDataEntity injectedExtendedData, final PreparedStatement preparedStatement) {
         try {
             super.inject(injectedExtendedData, preparedStatement);
             this.dataInjector.inject(injectedExtendedData, preparedStatement);

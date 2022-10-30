@@ -2,7 +2,7 @@ package by.zuevvlad.wialontransport.dao.parameterinjector.geographiccoordinate;
 
 import by.zuevvlad.wialontransport.dao.parameterinjector.CompositeParameterInjectorInPreparedStatement;
 import by.zuevvlad.wialontransport.dao.parameterinjector.exception.InjectionParameterPreparedStatementException;
-import by.zuevvlad.wialontransport.entity.Data.GeographicCoordinate;
+import by.zuevvlad.wialontransport.entity.DataEntity.GeographicCoordinate;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

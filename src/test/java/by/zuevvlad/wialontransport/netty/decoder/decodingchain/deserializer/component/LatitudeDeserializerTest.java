@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component;
 
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data.Latitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component.exception.NotValidInboundSerializedLatitudeException;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.junit.Assert.assertEquals;
 

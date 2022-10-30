@@ -4,7 +4,7 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
 import by.zuevvlad.wialontransport.deserializer.exception.DeserializationException;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,14 +30,14 @@ import static org.junit.Assert.assertEquals;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.ByteBuffer.wrap;
 import static java.time.LocalDateTime.parse;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.SOUTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.SOUTH;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static java.util.List.of;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -128,7 +128,7 @@ public final class DataDeserializerTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<Deserializer<Data>> createdDeserializers = new ArrayBlockingQueue<>(startedThreadAmount);
+        final BlockingQueue<Deserializer<DataEntity>> createdDeserializers = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
                 try {
@@ -158,7 +158,7 @@ public final class DataDeserializerTest {
         final LocalDateTime actual;
         final Method readingMethod = DataDeserializer.class
                 .getDeclaredMethod(METHOD_NAME_READING_DATE_TIME, ByteBuffer.class);
-        final Deserializer<Data> dataDeserializer = this.createDataDeserializer();
+        final Deserializer<DataEntity> dataDeserializer = this.createDataDeserializer();
         readingMethod.setAccessible(true);
         try {
             actual = (LocalDateTime) readingMethod.invoke(dataDeserializer, byteBuffer);
@@ -197,7 +197,7 @@ public final class DataDeserializerTest {
         final Latitude actual;
         final Method readingMethod = DataDeserializer.class
                 .getDeclaredMethod(METHOD_NAME_READING_LATITUDE, ByteBuffer.class);
-        final Deserializer<Data> dataDeserializer = this.createDataDeserializer();
+        final Deserializer<DataEntity> dataDeserializer = this.createDataDeserializer();
         readingMethod.setAccessible(true);
         try {
             actual = (Latitude) readingMethod.invoke(dataDeserializer, byteBuffer);
@@ -249,7 +249,7 @@ public final class DataDeserializerTest {
         final Longitude actual;
         final Method readingMethod = DataDeserializer.class
                 .getDeclaredMethod(METHOD_NAME_READING_LONGITUDE, ByteBuffer.class);
-        final Deserializer<Data> dataDeserializer = this.createDataDeserializer();
+        final Deserializer<DataEntity> dataDeserializer = this.createDataDeserializer();
         readingMethod.setAccessible(true);
         try {
             actual = (Longitude) readingMethod.invoke(dataDeserializer, byteBuffer);
@@ -311,7 +311,7 @@ public final class DataDeserializerTest {
         final int height = 18;
         final int amountSatellites = 19;
 
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogId(id)
                 .catalogDateTime(dateTime)
                 .catalogLatitude(latitude)
@@ -327,8 +327,8 @@ public final class DataDeserializerTest {
         when(this.mockedLongitudeBuilder.build()).thenReturn(longitude);
         when(this.mockedDataBuilder.build()).thenReturn(expected);
 
-        final Deserializer<Data> dataDeserializer = this.createDataDeserializer();
-        final Data actual = dataDeserializer.deserialize(null, serializedExpectedData);
+        final Deserializer<DataEntity> dataDeserializer = this.createDataDeserializer();
+        final DataEntity actual = dataDeserializer.deserialize(null, serializedExpectedData);
         assertEquals(expected, actual);
 
         verify(this.mockedDataBuilder, times(1)).catalogId(this.longArgumentCaptor.capture());
@@ -355,18 +355,18 @@ public final class DataDeserializerTest {
     @Test(expected = DeserializationException.class)
     public void dataShouldNotBeDeserializedBecauseByteArrayIsNull()
             throws Exception {
-        final Deserializer<Data> dataDeserializer = this.createDataDeserializer();
+        final Deserializer<DataEntity> dataDeserializer = this.createDataDeserializer();
         dataDeserializer.deserialize("", null);
     }
 
     @Test(expected = DeserializationException.class)
     public void dataShouldNotBeDeserializedBecauseOfLengthByteArrayIsNotAsRequired()
             throws Exception {
-        final Deserializer<Data> dataDeserializer = this.createDataDeserializer();
+        final Deserializer<DataEntity> dataDeserializer = this.createDataDeserializer();
         dataDeserializer.deserialize("", new byte[AMOUNT_BYTES_DATA * 2]);
     }
 
-    private Deserializer<Data> createDataDeserializer()
+    private Deserializer<DataEntity> createDataDeserializer()
             throws Exception {
         when(this.mockedLatitudeBuilderSupplier.get()).thenReturn(this.mockedLatitudeBuilder);
         when(this.mockedLatitudeBuilder.catalogDegrees(anyInt())).thenReturn(this.mockedLatitudeBuilder);
@@ -391,8 +391,8 @@ public final class DataDeserializerTest {
         when(this.mockedDataBuilder.catalogHeight(anyInt())).thenReturn(this.mockedDataBuilder);
         when(this.mockedDataBuilder.catalogAmountSatellites(anyInt())).thenReturn(this.mockedDataBuilder);
 
-        final Class<? extends Deserializer<Data>> deserializerClass = DataDeserializer.class;
-        final Constructor<? extends Deserializer<Data>> deserializerConstructor = deserializerClass
+        final Class<? extends Deserializer<DataEntity>> deserializerClass = DataDeserializer.class;
+        final Constructor<? extends Deserializer<DataEntity>> deserializerConstructor = deserializerClass
                 .getDeclaredConstructor(Supplier.class, Supplier.class, Supplier.class);
         deserializerConstructor.setAccessible(true);
         try {
@@ -403,7 +403,7 @@ public final class DataDeserializerTest {
         }
     }
 
-    private byte[] findSerializedData(final Data data) {
+    private byte[] findSerializedData(final DataEntity data) {
         final byte[] serializedData = new byte[AMOUNT_BYTES_DATA];
         final ByteBuffer byteBufferSerializedData = wrap(serializedData);
         byteBufferSerializedData.putLong(data.getId());

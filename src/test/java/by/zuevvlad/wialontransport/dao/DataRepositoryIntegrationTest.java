@@ -6,7 +6,7 @@ import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder
 import by.zuevvlad.wialontransport.dao.dbconnectionpool.DataBaseConnectionPool;
 import by.zuevvlad.wialontransport.dao.dbconnectionpool.DataBaseConnectionPoolImplementation;
 import by.zuevvlad.wialontransport.dao.exception.NoAvailableConnectionInPoolException;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,15 +21,15 @@ import java.util.function.Supplier;
 
 import static java.sql.Timestamp.from;
 import static java.time.Instant.now;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static java.lang.Long.MIN_VALUE;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.LongStream.rangeClosed;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 
 public final class DataRepositoryIntegrationTest {
     private static final String QUERY_TO_INSERT = "INSERT INTO data(id, date, time, "
@@ -59,7 +59,7 @@ public final class DataRepositoryIntegrationTest {
 
     private static final long VALUE_NOT_EXISTING_ID = MIN_VALUE;
 
-    private final EntityRepository<Data> dataRepository;
+    private final EntityRepository<DataEntity> dataRepository;
     private final DataBaseConnectionPool dataBaseConnectionPool;
     private final Supplier<LatitudeBuilder> latitudeBuilderSupplier;
     private final Supplier<LongitudeBuilder> longitudeBuilderSupplier;
@@ -123,23 +123,23 @@ public final class DataRepositoryIntegrationTest {
     @Test
     public void dataShouldBeFoundById() {
         final long id = 5;
-        final Optional<Data> optionalData = this.dataRepository.findById(id);
+        final Optional<DataEntity> optionalData = this.dataRepository.findById(id);
         assertTrue(optionalData.isPresent());
-        final Data data = optionalData.get();
+        final DataEntity data = optionalData.get();
         assertEquals(id, data.getId());
     }
 
     @Test
     public void dataShouldNotBeFoundByNotExistingId() {
-        final Optional<Data> optionalData = this.dataRepository.findById(VALUE_NOT_EXISTING_ID);
+        final Optional<DataEntity> optionalData = this.dataRepository.findById(VALUE_NOT_EXISTING_ID);
         assertTrue(optionalData.isEmpty());
     }
 
     @Test
     public void dataListShouldBeFound() {
-        final Collection<Data> data = this.dataRepository.findAll();
+        final Collection<DataEntity> data = this.dataRepository.findAll();
         final Set<Long> actualIds = data.stream()
-                .map(Data::getId)
+                .map(DataEntity::getId)
                 .collect(toSet());
         final Set<Long> expectedIds = rangeClosed(1, DATA_AMOUNT_FOR_TEST)
                 .boxed()
@@ -152,7 +152,7 @@ public final class DataRepositoryIntegrationTest {
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data insertedData = dataBuilder
+        final DataEntity insertedData = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 5, 1, 4, 3))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(23)
@@ -174,11 +174,11 @@ public final class DataRepositoryIntegrationTest {
         this.dataRepository.insert(insertedData);
         final long generatedId = insertedData.getId();
 
-        final Optional<Data> optionalInsertedDataFromRepository
+        final Optional<DataEntity> optionalInsertedDataFromRepository
                 = this.dataRepository.findById(generatedId);
         assertTrue(optionalInsertedDataFromRepository.isPresent());
 
-        final Data insertedDataFromRepository = optionalInsertedDataFromRepository.orElseThrow();
+        final DataEntity insertedDataFromRepository = optionalInsertedDataFromRepository.orElseThrow();
         assertEquals(insertedData, insertedDataFromRepository);
     }
 
@@ -187,7 +187,7 @@ public final class DataRepositoryIntegrationTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 5, 1, 4, 3))
                         .catalogLatitude(latitudeBuilder
@@ -228,9 +228,9 @@ public final class DataRepositoryIntegrationTest {
         this.dataRepository.insert(insertedData);
 
         insertedData.forEach(data -> {
-            final Optional<Data> optionalDataFromRepository = this.dataRepository.findById(data.getId());
+            final Optional<DataEntity> optionalDataFromRepository = this.dataRepository.findById(data.getId());
             assertTrue(optionalDataFromRepository.isPresent());
-            final Data dataFromRepository = optionalDataFromRepository.get();
+            final DataEntity dataFromRepository = optionalDataFromRepository.get();
             assertEquals(data, dataFromRepository);
         });
     }
@@ -240,7 +240,7 @@ public final class DataRepositoryIntegrationTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data updatedData = dataBuilder
+        final DataEntity updatedData = dataBuilder
                 .catalogId(5)
                 .catalogDateTime(LocalDateTime.of(2022, 11, 5, 1, 4, 3))
                 .catalogLatitude(latitudeBuilder
@@ -260,9 +260,9 @@ public final class DataRepositoryIntegrationTest {
                 .catalogAmountSatellites(31)
                 .build();
         this.dataRepository.update(updatedData);
-        final Optional<Data> optionalUpdatedDataFromRepository = this.dataRepository.findById(updatedData.getId());
+        final Optional<DataEntity> optionalUpdatedDataFromRepository = this.dataRepository.findById(updatedData.getId());
         assertTrue(optionalUpdatedDataFromRepository.isPresent());
-        final Data updatedDataFromRepository = optionalUpdatedDataFromRepository.get();
+        final DataEntity updatedDataFromRepository = optionalUpdatedDataFromRepository.get();
         assertEquals(updatedData, updatedDataFromRepository);
     }
 
@@ -271,7 +271,7 @@ public final class DataRepositoryIntegrationTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data deletedData = dataBuilder
+        final DataEntity deletedData = dataBuilder
                 .catalogId(5)
                 .catalogDateTime(LocalDateTime.of(2022, 11, 5, 1, 4, 3))
                 .catalogLatitude(latitudeBuilder
@@ -291,7 +291,7 @@ public final class DataRepositoryIntegrationTest {
                 .catalogAmountSatellites(31)
                 .build();
         this.dataRepository.delete(deletedData);
-        final Optional<Data> optionalDeletedDataFromRepository = this.dataRepository.findById(deletedData.getId());
+        final Optional<DataEntity> optionalDeletedDataFromRepository = this.dataRepository.findById(deletedData.getId());
         assertTrue(optionalDeletedDataFromRepository.isEmpty());
     }
 }

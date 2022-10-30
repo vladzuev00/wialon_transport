@@ -40,9 +40,9 @@ public final class StarterInboundPackageHandlerTest {
         assertEquals(expectedAmountOfAnswerers, actualAmountOfAnswerers);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void answererShouldNotAnswerOnRequestPackage() {
-        final RequestPingPackage requestPingPackage = new RequestPingPackage();
-        this.packageHandler.handleIndependently(requestPingPackage);
-    }
+//    @Test(expected = UnsupportedOperationException.class)
+//    public void answererShouldNotAnswerOnRequestPackage() {
+//        final RequestPingPackage requestPingPackage = new RequestPingPackage();
+//        this.packageHandler.handleIndependently(requestPingPackage);
+//    }
 }

@@ -5,9 +5,9 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Objects;
 
-import static by.zuevvlad.wialontransport.entity.User.Role.NOT_DEFINED;
+import static by.zuevvlad.wialontransport.entity.UserEntity.Role.NOT_DEFINED;
 
-public final class User extends Entity {
+public final class UserEntity extends Entity {
     public static final String NOT_DEFINED_EMAIL = "not defined";
     public static final String NOT_DEFINED_PASSWORD = "not defined";
 
@@ -15,13 +15,13 @@ public final class User extends Entity {
     private String password;
     private Role role;
 
-    public User() {
+    public UserEntity() {
         this.email = NOT_DEFINED_EMAIL;
         this.password = NOT_DEFINED_PASSWORD;
         this.role = NOT_DEFINED;
     }
 
-    public User(final long id, final String email, final String password, final Role role) {
+    public UserEntity(final long id, final String email, final String password, final Role role) {
         super(id);
         this.email = email;
         this.password = password;
@@ -57,7 +57,7 @@ public final class User extends Entity {
         if (!super.equals(otherObject)) {
             return true;
         }
-        final User other = (User) otherObject;
+        final UserEntity other = (UserEntity) otherObject;
         return Objects.equals(this.email, other.email)
                 && Objects.equals(this.password, other.password)
                 && this.role == other.role;

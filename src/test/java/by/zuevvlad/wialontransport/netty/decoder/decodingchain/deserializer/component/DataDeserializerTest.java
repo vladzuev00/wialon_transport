@@ -3,7 +3,7 @@ package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.com
 import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component.exception.NotValidInboundSerializedDataException;
 import org.junit.Test;
@@ -14,9 +14,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.*;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static java.time.Duration.between;
 import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.SECONDS;
@@ -28,7 +28,7 @@ public final class DataDeserializerTest {
     private static final String FIELD_NAME_REGEX_SERIALIZED_DATA = "REGEX_SERIALIZED_DATA";
 
     private final String regexSerializedData;
-    private final Deserializer<Data> dataDeserializer;
+    private final Deserializer<DataEntity> dataDeserializer;
     private final Supplier<DataBuilder> dataBuilderSupplier;
     private final Supplier<LatitudeBuilder> latitudeBuilderSupplier;
     private final Supplier<LongitudeBuilder> longitudeBuilderSupplier;
@@ -45,7 +45,7 @@ public final class DataDeserializerTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<Deserializer<Data>> createdDeserializers = new ArrayBlockingQueue<>(startedThreadAmount);
+        final BlockingQueue<Deserializer<DataEntity>> createdDeserializers = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
                 try {
@@ -122,12 +122,12 @@ public final class DataDeserializerTest {
     public void dataShouldBeDeserialized() {
         final String givenDeserialized = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;177";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)
@@ -160,12 +160,12 @@ public final class DataDeserializerTest {
     public void dataShouldBeDeserializedWithNotDefinedDate() {
         final String givenDeserialized = "NA;NA;5544.6025;N;03739.6834;E;100;15;10;177";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(now())
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)
@@ -198,12 +198,12 @@ public final class DataDeserializerTest {
     public void dataShouldBeDeserializedWithNotDefinedLatitude() {
         final String givenDeserialized = "151122;145643;NA;NA;03739.6834;E;100;15;10;177";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder.build())
                 .catalogLongitude(longitudeBuilder
@@ -225,12 +225,12 @@ public final class DataDeserializerTest {
     public void dataWithNotDefinedLongitudeShouldBeDeserialized() {
         final String givenDeserialized = "151122;145643;5544.6025;N;NA;NA;100;15;10;177";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)
@@ -252,12 +252,12 @@ public final class DataDeserializerTest {
     public void dataWithNotDefinedSpeedShouldBeDeserialized() {
         final String givenDeserialized = "151122;145643;5544.6025;N;03739.6834;E;NA;15;10;177";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)
@@ -284,12 +284,12 @@ public final class DataDeserializerTest {
     public void dataShouldBeDeserializedWithNotDefinedCourse() {
         final String givenDeserialized = "151122;145643;5544.6025;N;03739.6834;E;100;NA;10;177";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)
@@ -316,12 +316,12 @@ public final class DataDeserializerTest {
     public void dataShouldBeDeserializedWithNotDefinedHeight() {
         final String givenDeserialized = "151122;145643;5544.6025;N;03739.6834;E;100;15;NA;177";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)
@@ -348,12 +348,12 @@ public final class DataDeserializerTest {
     public void dataShouldBeDeserializedWithNotDefinedAmountSatellites() {
         final String givenDeserialized = "151122;145643;5544.6025;N;03739.6834;E;100;15;10;NA";
 
-        final Data actual = this.dataDeserializer.deserialize(givenDeserialized);
+        final DataEntity actual = this.dataDeserializer.deserialize(givenDeserialized);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(55)

@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.wialonpackage.reduceddata;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import by.zuevvlad.wialontransport.netty.tostringserializer.DataToStringSerializer;
 import by.zuevvlad.wialontransport.netty.tostringserializer.ToStringSerializer;
 import by.zuevvlad.wialontransport.wialonpackage.Package;
@@ -17,13 +17,13 @@ public final class RequestReducedDataPackage implements Package {
     private static final ToStringSerializer<RequestReducedDataPackage> REQUEST_REDUCED_DATA_PACKAGE_TO_STRING_SERIALIZER
             = new RequestReducedDataPackageToStringSerializer(DataToStringSerializer.create());
 
-    private final Data data;
+    private final DataEntity data;
 
-    public RequestReducedDataPackage(final Data data) {
+    public RequestReducedDataPackage(final DataEntity data) {
         this.data = data;
     }
 
-    public Data getData() {
+    public DataEntity getData() {
         return this.data;
     }
 
@@ -62,9 +62,9 @@ public final class RequestReducedDataPackage implements Package {
         //%s - serialized data
         private static final String SERIALIZED_REQUEST_DATA_PACKAGE_TEMPLATE = "#SD#%s\r\n";
 
-        private final ToStringSerializer<Data> dataToStringSerializer;
+        private final ToStringSerializer<DataEntity> dataToStringSerializer;
 
-        public RequestReducedDataPackageToStringSerializer(final ToStringSerializer<Data> dataToStringSerializer) {
+        public RequestReducedDataPackageToStringSerializer(final ToStringSerializer<DataEntity> dataToStringSerializer) {
             this.dataToStringSerializer = dataToStringSerializer;
         }
 

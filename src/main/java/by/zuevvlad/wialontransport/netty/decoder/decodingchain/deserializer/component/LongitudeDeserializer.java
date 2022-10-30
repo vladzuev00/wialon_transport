@@ -1,15 +1,15 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component;
 
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data.Longitude;
-import by.zuevvlad.wialontransport.entity.Data.Longitude.Type;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component.exception.NotValidInboundSerializedLongitudeException;
 
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.NOT_DEFINED;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.findByValue;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.NOT_DEFINED;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.findByValue;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 

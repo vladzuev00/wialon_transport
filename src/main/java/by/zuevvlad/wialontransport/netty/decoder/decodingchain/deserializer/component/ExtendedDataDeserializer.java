@@ -1,8 +1,8 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component;
 
 import by.zuevvlad.wialontransport.builder.entity.ExtendedDataBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.function.Supplier;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.join;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.*;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.*;
 import static java.util.Collections.emptyList;
 
-public final class ExtendedDataDeserializer implements Deserializer<ExtendedData> {
+public final class ExtendedDataDeserializer implements Deserializer<ExtendedDataEntity> {
     private static final String COMPONENTS_DELIMITER = ";";
     private static final String NOT_DEFINED_SERIALIZED_COMPONENT = "NA";
     private static final String EMPTY_STRING = "";
@@ -26,16 +26,16 @@ public final class ExtendedDataDeserializer implements Deserializer<ExtendedData
     private static final int INDEX_DESERIALIZED_DRIVER_KEY_CODE = 14;
     private static final int INDEX_DESERIALIZED_PARAMETERS = 15;
 
-    private final Deserializer<Data> dataDeserializer;
+    private final Deserializer<DataEntity> dataDeserializer;
     private final Deserializer<double[]> analogInputsDeserializer;
     private final Deserializer<List<Parameter>> parametersDeserializer;
     private final Supplier<ExtendedDataBuilder> extendedDataBuilderSupplier;
 
-    public static Deserializer<ExtendedData> create() {
+    public static Deserializer<ExtendedDataEntity> create() {
         return SingletonHolder.EXTENDED_DATA_DESERIALIZER;
     }
 
-    private ExtendedDataDeserializer(final Deserializer<Data> dataDeserializer,
+    private ExtendedDataDeserializer(final Deserializer<DataEntity> dataDeserializer,
                                      final Deserializer<double[]> analogInputsDeserializer,
                                      final Deserializer<List<Parameter>> parametersDeserializer,
                                      final Supplier<ExtendedDataBuilder> extendedDataBuilderSupplier) {
@@ -46,9 +46,9 @@ public final class ExtendedDataDeserializer implements Deserializer<ExtendedData
     }
 
     @Override
-    public ExtendedData deserialize(final String deserialized) {
+    public ExtendedDataEntity deserialize(final String deserialized) {
         final String[] deserializedComponents = deserialized.split(COMPONENTS_DELIMITER, -1);
-        final Data data = this.deserializeData(deserializedComponents);
+        final DataEntity data = this.deserializeData(deserializedComponents);
         final double reductionPrecision = deserializeReductionPrecision(deserializedComponents);
         final int inputs = deserializeInputs(deserializedComponents);
         final int outputs = deserializeOutputs(deserializedComponents);
@@ -68,7 +68,7 @@ public final class ExtendedDataDeserializer implements Deserializer<ExtendedData
                 .build();
     }
 
-    private Data deserializeData(final String[] deserializedComponents) {
+    private DataEntity deserializeData(final String[] deserializedComponents) {
 //        final String deserializedData = join(COMPONENTS_DELIMITER,
 //                deserializedComponents[INDEX_DESERIALIZED_DATE],
 //                deserializedComponents[INDEX_DESERIALIZED_TIME],
@@ -125,7 +125,7 @@ public final class ExtendedDataDeserializer implements Deserializer<ExtendedData
     }
 
     private static final class SingletonHolder {
-        private static final Deserializer<ExtendedData> EXTENDED_DATA_DESERIALIZER = new ExtendedDataDeserializer(
+        private static final Deserializer<ExtendedDataEntity> EXTENDED_DATA_DESERIALIZER = new ExtendedDataDeserializer(
                 DataDeserializer.create(), AnalogInputsDeserializer.create(), ParametersDeserializer.create(),
                 ExtendedDataBuilder::new);
     }

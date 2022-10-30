@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component;
 
 import by.zuevvlad.wialontransport.builder.ParameterBuilder;
-import by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.*;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.*;
 import static java.lang.Class.forName;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.junit.Assert.assertEquals;

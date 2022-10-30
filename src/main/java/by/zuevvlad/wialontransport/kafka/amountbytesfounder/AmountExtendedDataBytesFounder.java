@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.kafka.amountbytesfounder;
 
 import by.zuevvlad.wialontransport.kafka.amountbytesfounder.exception.ImpossibleToFindAmountObjectBytesException;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -9,17 +9,17 @@ import java.util.Map;
 import java.util.function.ToIntFunction;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.*;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.*;
 import static java.util.Arrays.stream;
 
-public final class AmountExtendedDataBytesFounder implements AmountObjectBytesFounder<ExtendedData> {
+public final class AmountExtendedDataBytesFounder implements AmountObjectBytesFounder<ExtendedDataEntity> {
     private final AmountObjectBytesFounder<double[]> amountDoubleArrayBytesFounder;
     private final AmountObjectBytesFounder<String> amountDriverKeyCodeBytesFounder;
     private final AmountObjectBytesFounder<List<Parameter>> amountParametersBytesFounder;
 
-    public static AmountObjectBytesFounder<ExtendedData> create() {
+    public static AmountObjectBytesFounder<ExtendedDataEntity> create() {
         return SingletonHolder.AMOUNT_EXTENDED_DATA_BYTES_FOUNDER;
     }
 
@@ -32,7 +32,7 @@ public final class AmountExtendedDataBytesFounder implements AmountObjectBytesFo
     }
 
     @Override
-    public int find(final ExtendedData extendedData) {
+    public int find(final ExtendedDataEntity extendedData) {
         final int analogInputsAmountOfBytes = this.amountDoubleArrayBytesFounder.find(extendedData.getAnalogInputs());
         final int driverKeyCodeAmountOfBytes = this.amountDriverKeyCodeBytesFounder
                 .find(extendedData.getDriverKeyCode());
@@ -124,7 +124,7 @@ public final class AmountExtendedDataBytesFounder implements AmountObjectBytesFo
     }
 
     private static final class SingletonHolder {
-        private static final AmountObjectBytesFounder<ExtendedData> AMOUNT_EXTENDED_DATA_BYTES_FOUNDER
+        private static final AmountObjectBytesFounder<ExtendedDataEntity> AMOUNT_EXTENDED_DATA_BYTES_FOUNDER
                 = new AmountExtendedDataBytesFounder(
                 new AmountDoubleArrayBytesFounder(),
                 new AmountStringBytesFounder(),

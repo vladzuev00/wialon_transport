@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.dao.parameterinjector.geographiccoordinate;
 
-import by.zuevvlad.wialontransport.entity.Data.Longitude;
-import by.zuevvlad.wialontransport.entity.Data.Longitude.Type;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type;
 
 public final class LongitudeInjectorInPreparedStatement
         extends GeographicCoordinateInjectorInPreparedStatement<Longitude> {

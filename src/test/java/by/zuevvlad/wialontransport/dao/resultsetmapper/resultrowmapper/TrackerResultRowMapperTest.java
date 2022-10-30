@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper;
 
 import by.zuevvlad.wialontransport.dao.resultsetmapper.exception.ResultSetMappingException;
-import by.zuevvlad.wialontransport.entity.Tracker;
+import by.zuevvlad.wialontransport.entity.TrackerEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -26,7 +26,7 @@ public final class TrackerResultRowMapperTest {
     private static final String COLUMN_NAME_IMEI = "imei";
     private static final String COLUMN_NAME_PASSWORD = "password";
 
-    private final ResultRowMapper<Tracker> deviceResultRowMapper;
+    private final ResultRowMapper<TrackerEntity> deviceResultRowMapper;
 
     @Mock
     private ResultSet mockedResultSet;
@@ -50,7 +50,7 @@ public final class TrackerResultRowMapperTest {
                 .thenReturn(givenImei)
                 .thenReturn(givenPassword);
 
-        final Tracker actual = this.deviceResultRowMapper.map(this.mockedResultSet);
+        final TrackerEntity actual = this.deviceResultRowMapper.map(this.mockedResultSet);
 //        final Tracker expected = new Tracker(givenId, givenImei, givenPassword);
         assertEquals(null, actual);
 
@@ -112,7 +112,7 @@ public final class TrackerResultRowMapperTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<ResultRowMapper<Tracker>> createdRowMappers
+        final BlockingQueue<ResultRowMapper<TrackerEntity>> createdRowMappers
                 = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {

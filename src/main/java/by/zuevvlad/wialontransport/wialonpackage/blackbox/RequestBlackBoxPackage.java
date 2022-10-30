@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.wialonpackage.blackbox;
 
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.tostringserializer.ToStringSerializer;
 import by.zuevvlad.wialontransport.netty.tostringserializer.collection.CollectionDataToStringSerializer;
 import by.zuevvlad.wialontransport.netty.tostringserializer.collection.CollectionExtendedDataToStringSerializer;
@@ -28,19 +28,19 @@ public final class RequestBlackBoxPackage implements Package {
             CollectionDataToStringSerializer.create(),
             CollectionExtendedDataToStringSerializer.create());
 
-    private final List<Data> data;
-    private final List<ExtendedData> extendedData;
+    private final List<DataEntity> data;
+    private final List<ExtendedDataEntity> extendedData;
 
-    public RequestBlackBoxPackage(final List<Data> data, final List<ExtendedData> extendedData) {
+    public RequestBlackBoxPackage(final List<DataEntity> data, final List<ExtendedDataEntity> extendedData) {
         this.data = data;
         this.extendedData = extendedData;
     }
 
-    public List<Data> getData() {
+    public List<DataEntity> getData() {
         return this.data;
     }
 
-    public List<ExtendedData> getExtendedData() {
+    public List<ExtendedDataEntity> getExtendedData() {
         return this.extendedData;
     }
 
@@ -89,12 +89,12 @@ public final class RequestBlackBoxPackage implements Package {
          */
         private static final String SERIALIZED_REQUEST_BLACK_BOX_PACKAGE_TEMPLATE = "#B#%s\r\n";
 
-        private final ToStringSerializer<Collection<Data>> collectionDataToStringSerializer;
-        private final ToStringSerializer<Collection<ExtendedData>> collectionExtendedDataToStringSerializer;
+        private final ToStringSerializer<Collection<DataEntity>> collectionDataToStringSerializer;
+        private final ToStringSerializer<Collection<ExtendedDataEntity>> collectionExtendedDataToStringSerializer;
 
         public RequestBlackBoxPackageToStringSerializer(
-                final ToStringSerializer<Collection<Data>> collectionDataToStringSerializer,
-                final ToStringSerializer<Collection<ExtendedData>> collectionExtendedDataToStringSerializer) {
+                final ToStringSerializer<Collection<DataEntity>> collectionDataToStringSerializer,
+                final ToStringSerializer<Collection<ExtendedDataEntity>> collectionExtendedDataToStringSerializer) {
             this.collectionDataToStringSerializer = collectionDataToStringSerializer;
             this.collectionExtendedDataToStringSerializer = collectionExtendedDataToStringSerializer;
         }

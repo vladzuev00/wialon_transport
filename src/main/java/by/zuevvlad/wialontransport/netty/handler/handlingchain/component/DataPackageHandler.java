@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.netty.handler.handlingchain.component;
 
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.handler.handlingchain.PackageHandler;
 import by.zuevvlad.wialontransport.service.crud.CRUDEntityService;
 import by.zuevvlad.wialontransport.wialonpackage.Package;
@@ -11,14 +11,14 @@ import io.netty.channel.ChannelHandlerContext;
 import static by.zuevvlad.wialontransport.wialonpackage.data.ResponseDataPackage.Status.PACKAGE_FIX_SUCCESS;
 
 public final class DataPackageHandler extends PackageHandler {
-    private final CRUDEntityService<ExtendedData> extendedDataService;
+    private final CRUDEntityService<ExtendedDataEntity> extendedDataService;
 
-    public static PackageHandler create() {
-        return SingletonHolder.PACKAGE_HANDLER;
-    }
+//    public static PackageHandler create() {
+//        return SingletonHolder.PACKAGE_HANDLER;
+//    }
 
     private DataPackageHandler(final PackageHandler nextHandler,
-                               final CRUDEntityService<ExtendedData> extendedDataService) {
+                               final CRUDEntityService<ExtendedDataEntity> extendedDataService) {
         super(RequestDataPackage.class, nextHandler);
         this.extendedDataService = extendedDataService;
     }
@@ -31,7 +31,7 @@ public final class DataPackageHandler extends PackageHandler {
         context.writeAndFlush(responseDataPackage);
     }
 
-    private static final class SingletonHolder {
-        private static final PackageHandler PACKAGE_HANDLER = new DataPackageHandler();
-    }
+//    private static final class SingletonHolder {
+//        private static final PackageHandler PACKAGE_HANDLER = new DataPackageHandler();
+//    }
 }

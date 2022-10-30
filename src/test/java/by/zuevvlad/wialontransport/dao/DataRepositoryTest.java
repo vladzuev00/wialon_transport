@@ -11,7 +11,7 @@ import by.zuevvlad.wialontransport.dao.exception.InsertingEntitiesException;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.ResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.exception.ResultSetMappingException;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static java.time.LocalDateTime.now;
 import static java.util.stream.IntStream.range;
 import static org.junit.Assert.*;
@@ -40,8 +40,8 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 
 @RunWith(MockitoJUnitRunner.class)
 public final class DataRepositoryTest {
@@ -122,10 +122,10 @@ public final class DataRepositoryTest {
     private DataBaseConnectionPool mockedDataBaseConnectionPool;
 
     @Mock
-    private ResultRowMapper<Data> mockedDataResultRowMapper;
+    private ResultRowMapper<DataEntity> mockedDataResultRowMapper;
 
     @Mock
-    private ResultSetMapper<Data> mockedDataResultSetMapper;
+    private ResultSetMapper<DataEntity> mockedDataResultSetMapper;
 
     @Mock
     private FounderGeneratedId<Long> mockedFounderGeneratedLongId;
@@ -198,7 +198,7 @@ public final class DataRepositoryTest {
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(now())
                 .catalogLatitude(latitudeBuilder
@@ -225,10 +225,10 @@ public final class DataRepositoryTest {
         when(this.mockedResultSet.next()).thenReturn(true);
         when(this.mockedDataResultRowMapper.map(any(ResultSet.class))).thenReturn(expected);
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
-        final Optional<Data> optionalActual = dataRepository.findById(expected.getId());
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
+        final Optional<DataEntity> optionalActual = dataRepository.findById(expected.getId());
         assertTrue(optionalActual.isPresent());
-        final Data actual = optionalActual.get();
+        final DataEntity actual = optionalActual.get();
         assertEquals(expected, actual);
 
         verify(this.mockedDataBaseConnectionPool, times(1)).findAvailableConnection();
@@ -256,7 +256,7 @@ public final class DataRepositoryTest {
             throws Exception {
         when(this.mockedDataBaseConnectionPool.findAvailableConnection()).thenReturn(empty());
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.findById(MIN_VALUE);
 
         verify(this.mockedDataBaseConnectionPool, times(1)).findAvailableConnection();
@@ -265,7 +265,7 @@ public final class DataRepositoryTest {
     @Test(expected = FindingEntityException.class)
     public void dataShouldNotBeFoundByIdBecauseOfExceptionDuringPreparingStatement()
             throws Exception {
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         when(this.mockedDataBaseConnectionPool.findAvailableConnection())
                 .thenReturn(Optional.of(this.mockedConnection));
         when(this.mockedConnection.prepareStatement(anyString())).thenThrow(SQLException.class);
@@ -279,7 +279,7 @@ public final class DataRepositoryTest {
     @Test(expected = FindingEntityException.class)
     public void dataShouldNotBeFoundBecauseOfExceptionDuringSettingIdParameter()
             throws Exception {
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         when(this.mockedDataBaseConnectionPool.findAvailableConnection())
                 .thenReturn(Optional.of(this.mockedConnection));
         when(this.mockedConnection.prepareStatement(anyString())).thenReturn(this.mockedPreparedStatement);
@@ -294,13 +294,13 @@ public final class DataRepositoryTest {
     @Test
     public void dataShouldNotBeFoundByIdBecauseOfResultSetDoesntHaveNext()
             throws Exception {
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         when(this.mockedDataBaseConnectionPool.findAvailableConnection())
                 .thenReturn(Optional.of(this.mockedConnection));
         when(this.mockedConnection.prepareStatement(anyString())).thenReturn(this.mockedPreparedStatement);
         when(this.mockedPreparedStatement.executeQuery()).thenReturn(this.mockedResultSet);
         when(this.mockedResultSet.next()).thenReturn(false);
-        final Optional<Data> optionalData = dataRepository.findById(MIN_VALUE);
+        final Optional<DataEntity> optionalData = dataRepository.findById(MIN_VALUE);
         assertTrue(optionalData.isEmpty());
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -315,7 +315,7 @@ public final class DataRepositoryTest {
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
 
-        final List<Data> expected = List.of(
+        final List<DataEntity> expected = List.of(
                 dataBuilder
                         .catalogId(255)
                         .catalogDateTime(now())
@@ -362,8 +362,8 @@ public final class DataRepositoryTest {
         when(this.mockedStatement.executeQuery(anyString())).thenReturn(this.mockedResultSet);
         when(this.mockedDataResultSetMapper.map(any(ResultSet.class))).thenReturn(expected);
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
-        final Collection<Data> actual = dataRepository.findAll();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
+        final Collection<DataEntity> actual = dataRepository.findAll();
         assertEquals(expected, actual);
 
         verify(this.mockedDataBaseConnectionPool, times(1)).findAvailableConnection();
@@ -385,7 +385,7 @@ public final class DataRepositoryTest {
     public void dataListShouldNotBeFoundBecauseOfNoAvailableConnectionInPool()
             throws Exception {
         when(this.mockedDataBaseConnectionPool.findAvailableConnection()).thenReturn(empty());
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.findAll();
     }
 
@@ -395,7 +395,7 @@ public final class DataRepositoryTest {
         when(this.mockedDataBaseConnectionPool.findAvailableConnection())
                 .thenReturn(Optional.of(this.mockedConnection));
         when(this.mockedConnection.createStatement()).thenThrow(SQLException.class);
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.findAll();
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -410,7 +410,7 @@ public final class DataRepositoryTest {
                 .thenReturn(Optional.of(this.mockedConnection));
         when(this.mockedConnection.createStatement()).thenReturn(this.mockedStatement);
         when(this.mockedStatement.executeQuery(anyString())).thenThrow(SQLException.class);
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.findAll();
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -427,7 +427,7 @@ public final class DataRepositoryTest {
         when(this.mockedStatement.executeQuery(anyString())).thenReturn(this.mockedResultSet);
         when(this.mockedDataResultSetMapper.map(any(ResultSet.class)))
                 .thenThrow(ResultSetMappingException.class);
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.findAll();
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -450,10 +450,10 @@ public final class DataRepositoryTest {
 
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data mockedData = this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(),
+        final DataEntity mockedData = this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(),
                 0, 0, 0, 0);
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(mockedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1)).findAvailableConnection();
@@ -492,8 +492,8 @@ public final class DataRepositoryTest {
         when(this.mockedDataBaseConnectionPool.findAvailableConnection()).thenReturn(empty());
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data insertedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity insertedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
     }
 
@@ -507,9 +507,9 @@ public final class DataRepositoryTest {
                 .thenThrow(SQLException.class);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data insertedData = dataBuilder.build();
+        final DataEntity insertedData = dataBuilder.build();
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -528,9 +528,9 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedConnection).setAutoCommit(anyBoolean());
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data insertedData = dataBuilder.build();
+        final DataEntity insertedData = dataBuilder.build();
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -550,10 +550,10 @@ public final class DataRepositoryTest {
 
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data mockedData = this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(),
+        final DataEntity mockedData = this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(),
                 2, 2, 2, 2);
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(mockedData);
 
         verify(this.mockedConnection, times(2))
@@ -579,10 +579,10 @@ public final class DataRepositoryTest {
 
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data mockedData = this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(),
+        final DataEntity mockedData = this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(),
                 3, 3, 3, 3);
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(mockedData);
 
         verify(this.mockedConnection, times(1)).rollback();
@@ -609,8 +609,8 @@ public final class DataRepositoryTest {
                 .thenReturn(empty());
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data insertedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity insertedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedConnection, times(2))
@@ -640,8 +640,8 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedConnection).commit();
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data insertedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity insertedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedConnection, times(2))
@@ -671,13 +671,13 @@ public final class DataRepositoryTest {
 
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(), 1, 2, 3, 4),
                 this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(), 5, 6, 7, 8),
                 this.createMockedData(now(), latitudeBuilder.build(), longitudeBuilder.build(), 10, 11, 12, 13)
         );
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1)).findAvailableConnection();
@@ -711,11 +711,11 @@ public final class DataRepositoryTest {
             throws Exception {
         when(this.mockedDataBaseConnectionPool.findAvailableConnection()).thenReturn(empty());
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 dataBuilder.build(),
                 dataBuilder.build(),
                 dataBuilder.build());
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
     }
 
@@ -729,11 +729,11 @@ public final class DataRepositoryTest {
                 .thenThrow(SQLException.class);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 dataBuilder.build(),
                 dataBuilder.build(),
                 dataBuilder.build());
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -752,11 +752,11 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedConnection).setAutoCommit(anyBoolean());
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 dataBuilder.build(),
                 dataBuilder.build(),
                 dataBuilder.build());
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -775,11 +775,11 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedPreparedStatement).addBatch();
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 dataBuilder.build(),
                 dataBuilder.build(),
                 dataBuilder.build());
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedConnection, times(1)).rollback();
@@ -805,11 +805,11 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedPreparedStatement).clearParameters();
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 dataBuilder.build(),
                 dataBuilder.build(),
                 dataBuilder.build());
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedConnection, times(1)).rollback();
@@ -835,11 +835,11 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedConnection).commit();
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final List<Data> insertedData = List.of(
+        final List<DataEntity> insertedData = List.of(
                 dataBuilder.build(),
                 dataBuilder.build(),
                 dataBuilder.build());
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.insert(insertedData);
 
         verify(this.mockedConnection, times(1)).rollback();
@@ -863,8 +863,8 @@ public final class DataRepositoryTest {
                 .thenReturn(this.mockedPreparedStatement);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data updatedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity updatedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.update(updatedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1)).findAvailableConnection();
@@ -886,8 +886,8 @@ public final class DataRepositoryTest {
         when(this.mockedDataBaseConnectionPool.findAvailableConnection()).thenReturn(empty());
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data updatedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity updatedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.update(updatedData);
     }
 
@@ -900,8 +900,8 @@ public final class DataRepositoryTest {
                 .thenThrow(SQLException.class);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data updatedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity updatedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.update(updatedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -919,8 +919,8 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedPreparedStatement).executeUpdate();
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data updatedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity updatedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.update(updatedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -938,10 +938,10 @@ public final class DataRepositoryTest {
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final long idDeletedData = 255;
-        final Data deletedData = this.createMockedData(idDeletedData, now(), latitudeBuilder.build(),
+        final DataEntity deletedData = this.createMockedData(idDeletedData, now(), latitudeBuilder.build(),
                 longitudeBuilder.build(), 0, 1, 2, 3);
 
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.delete(deletedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1)).findAvailableConnection();
@@ -967,8 +967,8 @@ public final class DataRepositoryTest {
             throws Exception {
         when(this.mockedDataBaseConnectionPool.findAvailableConnection()).thenReturn(empty());
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data deletedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity deletedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.delete(deletedData);
     }
 
@@ -981,8 +981,8 @@ public final class DataRepositoryTest {
                 .thenThrow(SQLException.class);
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data deletedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity deletedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.delete(deletedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -1000,8 +1000,8 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedPreparedStatement).setLong(anyInt(), anyLong());
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data deletedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity deletedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.delete(deletedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -1019,8 +1019,8 @@ public final class DataRepositoryTest {
         doThrow(SQLException.class).when(this.mockedPreparedStatement).executeUpdate();
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data deletedData = dataBuilder.build();
-        final EntityRepository<Data> dataRepository = this.createDataRepository();
+        final DataEntity deletedData = dataBuilder.build();
+        final EntityRepository<DataEntity> dataRepository = this.createDataRepository();
         dataRepository.delete(deletedData);
 
         verify(this.mockedDataBaseConnectionPool, times(1))
@@ -1028,10 +1028,10 @@ public final class DataRepositoryTest {
         assertSame(this.mockedConnection, this.connectionArgumentCaptor.getValue());
     }
 
-    private EntityRepository<Data> createDataRepository()
+    private EntityRepository<DataEntity> createDataRepository()
             throws Exception {
-        final Class<? extends EntityRepository<Data>> dataRepositoryClass = null;
-        final Constructor<? extends EntityRepository<Data>> dataRepositoryConstructor
+        final Class<? extends EntityRepository<DataEntity>> dataRepositoryClass = null;
+        final Constructor<? extends EntityRepository<DataEntity>> dataRepositoryConstructor
                 = dataRepositoryClass.getDeclaredConstructor(
                 DataBaseConnectionPool.class, ResultRowMapper.class, ResultSetMapper.class,
                 FounderGeneratedId.class);
@@ -1046,18 +1046,18 @@ public final class DataRepositoryTest {
     }
 
     @SuppressWarnings("all")
-    private Data createMockedData(final long id, final LocalDateTime dateTime, final Latitude latitude,
-                                  final Longitude longitude, final int speed, final int course, final int height,
-                                  final int amountSatellites) {
-        final Data mockedData = this.createMockedData(dateTime, latitude, longitude, speed, course, height,
+    private DataEntity createMockedData(final long id, final LocalDateTime dateTime, final Latitude latitude,
+                                        final Longitude longitude, final int speed, final int course, final int height,
+                                        final int amountSatellites) {
+        final DataEntity mockedData = this.createMockedData(dateTime, latitude, longitude, speed, course, height,
                 amountSatellites);
         when(mockedData.getId()).thenReturn(id);
         return mockedData;
     }
 
-    private Data createMockedData(final LocalDateTime dateTime, final Latitude latitude, final Longitude longitude,
-                                  final int speed, final int course, final int height, final int amountSatellites) {
-        final Data mockedData = mock(Data.class);
+    private DataEntity createMockedData(final LocalDateTime dateTime, final Latitude latitude, final Longitude longitude,
+                                        final int speed, final int course, final int height, final int amountSatellites) {
+        final DataEntity mockedData = mock(DataEntity.class);
         when(mockedData.getDateTime()).thenReturn(dateTime);
         when(mockedData.getLatitude()).thenReturn(latitude);
         when(mockedData.getLongitude()).thenReturn(longitude);

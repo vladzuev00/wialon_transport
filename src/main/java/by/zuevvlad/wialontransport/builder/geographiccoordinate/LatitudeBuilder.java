@@ -2,9 +2,9 @@ package by.zuevvlad.wialontransport.builder.geographiccoordinate;
 
 import by.zuevvlad.wialontransport.builder.Builder;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NOT_DEFINED;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NOT_DEFINED;
 import static java.lang.Integer.MIN_VALUE;
 
 public final class LatitudeBuilder implements Builder<Latitude> {

@@ -5,8 +5,8 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.entity.ExtendedDataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.PackageDecoder;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.exception.NoSuitablePackageDecoderException;
 import by.zuevvlad.wialontransport.wialonpackage.Package;
@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.SOUTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.INTEGER;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.STRING;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.SOUTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.INTEGER;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.STRING;
 import static java.util.List.of;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -68,7 +68,7 @@ public final class RequestPackageDecoderChainIntegrationTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogDateTime(LocalDateTime.of(2003, 11, 12, 11, 30, 13))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(23)
@@ -105,7 +105,7 @@ public final class RequestPackageDecoderChainIntegrationTest {
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
 
-        final ExtendedData extendedData = extendedDataBuilder
+        final ExtendedDataEntity extendedData = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2003, 11, 12, 11, 30, 13))
                         .catalogLatitude(latitudeBuilder
@@ -170,7 +170,7 @@ public final class RequestPackageDecoderChainIntegrationTest {
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
 
-        final Supplier<Data> dataSupplier = () -> dataBuilder
+        final Supplier<DataEntity> dataSupplier = () -> dataBuilder
                 .catalogDateTime(LocalDateTime.of(2003, 11, 12, 11, 30, 13))
                 .catalogLatitude(latitudeBuilder
                         .catalogDegrees(10)
@@ -192,7 +192,7 @@ public final class RequestPackageDecoderChainIntegrationTest {
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final Supplier<ExtendedData> extendedDataSupplier = () -> extendedDataBuilder
+        final Supplier<ExtendedDataEntity> extendedDataSupplier = () -> extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2003, 11, 12, 11, 30, 13))
                         .catalogLatitude(latitudeBuilder
@@ -231,8 +231,8 @@ public final class RequestPackageDecoderChainIntegrationTest {
                 ))
                 .build();
 
-        final List<Data> data = List.of(dataSupplier.get(), dataSupplier.get());
-        final List<ExtendedData> extendedData = List.of(extendedDataSupplier.get(), extendedDataSupplier.get());
+        final List<DataEntity> data = List.of(dataSupplier.get(), dataSupplier.get());
+        final List<ExtendedDataEntity> extendedData = List.of(extendedDataSupplier.get(), extendedDataSupplier.get());
         final RequestBlackBoxPackage expected = new RequestBlackBoxPackage(data, extendedData);
 
         assertEquals(expected, actual);

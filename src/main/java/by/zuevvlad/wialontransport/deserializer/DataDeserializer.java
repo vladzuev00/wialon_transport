@@ -4,7 +4,7 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
 import by.zuevvlad.wialontransport.deserializer.exception.DeserializationException;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.nio.ByteBuffer;
@@ -13,13 +13,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.function.Supplier;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.time.LocalDateTime.parse;
 import static java.nio.ByteBuffer.wrap;
 
-public final class DataDeserializer implements Deserializer<Data> {
+public final class DataDeserializer implements Deserializer<DataEntity> {
     private static final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
     private static final byte[] DATE_TIME_PATTERN_BYTES = DATE_TIME_PATTERN.getBytes(UTF_8);
     private static final DateTimeFormatter DATE_TIME_FORMATTER = ofPattern(DATE_TIME_PATTERN);
@@ -44,7 +44,7 @@ public final class DataDeserializer implements Deserializer<Data> {
     private final Supplier<LongitudeBuilder> longitudeBuilderSupplier;
     private final Supplier<DataBuilder> dataBuilderSupplier;
 
-    public static Deserializer<Data> create() {
+    public static Deserializer<DataEntity> create() {
         return SingletonHolder.DATA_DESERIALIZER;
     }
 
@@ -57,7 +57,7 @@ public final class DataDeserializer implements Deserializer<Data> {
     }
 
     @Override
-    public Data deserialize(final String topic, final byte[] deserializedData) {
+    public DataEntity deserialize(final String topic, final byte[] deserializedData) {
         if (deserializedData == null) {
             throw new DeserializationException("Deserialized array of bytes is null.");
         }
@@ -130,7 +130,7 @@ public final class DataDeserializer implements Deserializer<Data> {
     }
 
     private static final class SingletonHolder {
-        private static final Deserializer<Data> DATA_DESERIALIZER
+        private static final Deserializer<DataEntity> DATA_DESERIALIZER
                 = new DataDeserializer(LatitudeBuilder::new, LongitudeBuilder::new, DataBuilder::new);
     }
 }

@@ -3,9 +3,9 @@ package by.zuevvlad.wialontransport.kafka.serializer;
 import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.Data.Latitude;
-import by.zuevvlad.wialontransport.entity.Data.Longitude;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 import org.apache.kafka.common.serialization.Serializer;
 import org.junit.Test;
 
@@ -17,8 +17,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static java.nio.ByteBuffer.allocate;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.parse;
@@ -48,7 +48,7 @@ public final class DataSerializerIntegrationTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<Serializer<Data>> createdSerializers = new ArrayBlockingQueue<>(startedThreadAmount);
+        final BlockingQueue<Serializer<DataEntity>> createdSerializers = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
                 try {
@@ -176,7 +176,7 @@ public final class DataSerializerIntegrationTest {
         final int amountSatellites = 10;
 
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(id)
                 .catalogDateTime(dateTime)
                 .catalogLatitude(latitude)
@@ -187,7 +187,7 @@ public final class DataSerializerIntegrationTest {
                 .catalogAmountSatellites(amountSatellites)
                 .build();
 
-        final Serializer<Data> dataSerializer = DataSerializer.create();
+        final Serializer<DataEntity> dataSerializer = DataSerializer.create();
         final byte[] actual = dataSerializer.serialize("", data);
         final byte[] expected = {0, 0, 0, 0, 0, 0, 0, -1, 49, 48, 46, 49, 48, 46, 50, 48, 50, 50, 32, 49, 48, 58, 49,
                 48, 58, 49, 48, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 78, 0, 0, 0, 4, 0, 0, 0, 5, 0, 0, 0, 6, 0, 69,

@@ -2,9 +2,9 @@ package by.zuevvlad.wialontransport.builder.geographiccoordinate;
 
 import by.zuevvlad.wialontransport.builder.Builder;
 
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.NOT_DEFINED;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.NOT_DEFINED;
 import static java.lang.Integer.MIN_VALUE;
 
 public final class LongitudeBuilder implements Builder<Longitude> {

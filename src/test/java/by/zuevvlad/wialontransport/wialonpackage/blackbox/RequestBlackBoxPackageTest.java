@@ -5,21 +5,21 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.entity.ExtendedDataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.Data.Latitude;
-import by.zuevvlad.wialontransport.entity.Data.Longitude;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.SOUTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.INTEGER;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.STRING;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.SOUTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.INTEGER;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.STRING;
 import static java.util.List.of;
 import static org.junit.Assert.assertEquals;
 
@@ -40,8 +40,8 @@ public final class RequestBlackBoxPackageTest {
 
     @Test
     public void requestBlackBoxPackageShouldBeSerialized() {
-        final List<Data> data = List.of(this.createData(255), this.createData(256));
-        final List<ExtendedData> extendedData = List.of(this.createExtendedData(257), this.createExtendedData(258));
+        final List<DataEntity> data = List.of(this.createData(255), this.createData(256));
+        final List<ExtendedDataEntity> extendedData = List.of(this.createExtendedData(257), this.createExtendedData(258));
         final RequestBlackBoxPackage requestBlackBoxPackage = new RequestBlackBoxPackage(data, extendedData);
         final String actual = requestBlackBoxPackage.serialize();
         final String expected = "#B#121103;113013;1011.12;S;01314.15;E;16;17;18;19"
@@ -52,7 +52,7 @@ public final class RequestBlackBoxPackageTest {
         assertEquals(expected, actual);
     }
 
-    private Data createData(final long id) {
+    private DataEntity createData(final long id) {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
 
         final LocalDateTime dateTime = LocalDateTime.of(2003, 11, 12, 11, 30, 13);
@@ -95,7 +95,7 @@ public final class RequestBlackBoxPackageTest {
                 .build();
     }
 
-    private ExtendedData createExtendedData(final long id) {
+    private ExtendedDataEntity createExtendedData(final long id) {
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();

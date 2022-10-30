@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.netty.handler;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import by.zuevvlad.wialontransport.netty.handler.handlingchain.PackageHandler;
 import by.zuevvlad.wialontransport.netty.handler.handlingchain.component.RequestReducedDataPackageHandler;
 import by.zuevvlad.wialontransport.service.extendeddata.ExtendedDataService;
@@ -37,7 +37,7 @@ public final class RequestReducedDataPackageHandlerTest {
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
                 try {
-                    createdAnswerers.put(RequestReducedDataPackageHandler.create());
+                    createdAnswerers.put(null);
                 } catch (final InterruptedException cause) {
                     throw new RuntimeException(cause);
                 }
@@ -54,7 +54,7 @@ public final class RequestReducedDataPackageHandlerTest {
 
     @Test
     public void answererShouldAnswerIndependently() {
-        final Data givenData = new Data();
+        final DataEntity givenData = new DataEntity();
         final Package givenPackage = new RequestReducedDataPackage(givenData);
 
 

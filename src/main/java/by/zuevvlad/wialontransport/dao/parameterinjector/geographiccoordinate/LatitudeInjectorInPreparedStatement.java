@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.dao.parameterinjector.geographiccoordinate;
 
-import by.zuevvlad.wialontransport.entity.Data.Latitude;
-import by.zuevvlad.wialontransport.entity.Data.Latitude.Type;
+import by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type;
 
 public final class LatitudeInjectorInPreparedStatement
         extends GeographicCoordinateInjectorInPreparedStatement<Latitude> {

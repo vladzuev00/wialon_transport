@@ -5,7 +5,7 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.entity.ExtendedDataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.wialonpackage.PackageDeserializer;
 import by.zuevvlad.wialontransport.wialonpackage.Package;
 import by.zuevvlad.wialontransport.wialonpackage.data.RequestDataPackage;
@@ -17,9 +17,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.*;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.junit.Assert.assertEquals;
 
@@ -78,7 +78,7 @@ public final class RequestDataPackageDeserializerTest {
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData extendedData = extendedDataBuilder
+        final ExtendedDataEntity extendedData = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder

@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.wialonpackage.data;
 
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component.ExtendedDataDeserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.wialonpackage.PackageDeserializer;
@@ -12,13 +12,13 @@ import static by.zuevvlad.wialontransport.wialonpackage.data.RequestDataPackage.
 public final class RequestDataPackageDeserializer implements PackageDeserializer {
     private static final String EMPTY_STRING = "";
 
-    private final Deserializer<ExtendedData> extendedDataDeserializer;
+    private final Deserializer<ExtendedDataEntity> extendedDataDeserializer;
 
     public static PackageDeserializer create() {
         return SingletonHolder.PACKAGE_DESERIALIZER;
     }
 
-    private RequestDataPackageDeserializer(final Deserializer<ExtendedData> extendedDataDeserializer) {
+    private RequestDataPackageDeserializer(final Deserializer<ExtendedDataEntity> extendedDataDeserializer) {
         this.extendedDataDeserializer = extendedDataDeserializer;
     }
 
@@ -27,7 +27,7 @@ public final class RequestDataPackageDeserializer implements PackageDeserializer
         final String serializedExtendedData = deserialized
                 .replace(PACKAGE_DESCRIPTION_PREFIX, EMPTY_STRING)
                 .replace(PACKAGE_DESCRIPTION_POSTFIX, EMPTY_STRING);
-        final ExtendedData extendedData = this.extendedDataDeserializer.deserialize(serializedExtendedData);
+        final ExtendedDataEntity extendedData = this.extendedDataDeserializer.deserialize(serializedExtendedData);
         return new RequestDataPackage(extendedData);
     }
 

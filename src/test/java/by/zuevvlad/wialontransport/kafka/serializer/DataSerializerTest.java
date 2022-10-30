@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.kafka.serializer;
 
 import by.zuevvlad.wialontransport.kafka.amountbytesfounder.AmountObjectBytesFounder;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.apache.kafka.common.serialization.Serializer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,13 +17,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
 import static java.time.format.DateTimeFormatter.ofPattern;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -56,7 +56,7 @@ public final class DataSerializerTest {
     private ByteBuffer mockedByteBuffer;
 
     @Mock
-    private AmountObjectBytesFounder<Data> mockedAmountDataBytesFounder;
+    private AmountObjectBytesFounder<DataEntity> mockedAmountDataBytesFounder;
 
     @Captor
     private ArgumentCaptor<byte[]> byteArrayArgumentCaptor;
@@ -68,7 +68,7 @@ public final class DataSerializerTest {
     private ArgumentCaptor<Character> characterArgumentCaptor;
 
     @Captor
-    private ArgumentCaptor<Data> dataArgumentCaptor;
+    private ArgumentCaptor<DataEntity> dataArgumentCaptor;
 
     @Test
     public void dateTimeShouldBeWrittenInByteBuffer()
@@ -176,10 +176,10 @@ public final class DataSerializerTest {
         final int height = 9;
         final int amountSatellites = 10;
 
-        final Data mockedData = this.createMockedData(id, dateTime, mockedLatitude, mockedLongitude, speed, course,
+        final DataEntity mockedData = this.createMockedData(id, dateTime, mockedLatitude, mockedLongitude, speed, course,
                 height, amountSatellites);
-        final Serializer<Data> dataSerializer = this.createDataSerializer();
-        when(this.mockedAmountDataBytesFounder.find(any(Data.class))).thenReturn(AMOUNT_DATA_BYTES);
+        final Serializer<DataEntity> dataSerializer = this.createDataSerializer();
+        when(this.mockedAmountDataBytesFounder.find(any(DataEntity.class))).thenReturn(AMOUNT_DATA_BYTES);
 
         final byte[] actual = dataSerializer.serialize(null, mockedData);
         final byte[] expected = {0, 0, 0, 0, 0, 0, 0, -1, 49, 48, 46, 49, 48, 46, 50, 48, 50, 50, 32, 49, 48, 58,
@@ -212,10 +212,10 @@ public final class DataSerializerTest {
         assertSame(mockedData, this.dataArgumentCaptor.getValue());
     }
 
-    private Serializer<Data> createDataSerializer()
+    private Serializer<DataEntity> createDataSerializer()
             throws Exception {
-        final Class<? extends Serializer<Data>> serializerClass = DataSerializer.class;
-        final Constructor<? extends Serializer<Data>> serializerConstructor = serializerClass
+        final Class<? extends Serializer<DataEntity>> serializerClass = DataSerializer.class;
+        final Constructor<? extends Serializer<DataEntity>> serializerConstructor = serializerClass
                 .getDeclaredConstructor(AmountObjectBytesFounder.class);
         serializerConstructor.setAccessible(true);
         try {
@@ -248,10 +248,10 @@ public final class DataSerializerTest {
     }
 
     @SuppressWarnings("all")
-    private Data createMockedData(final long id, final LocalDateTime dateTime, final Latitude latitude,
-                                  final Longitude longitude, final int speed, final int course, final int height,
-                                  final int amountSatellites) {
-        final Data mockedData = mock(Data.class);
+    private DataEntity createMockedData(final long id, final LocalDateTime dateTime, final Latitude latitude,
+                                        final Longitude longitude, final int speed, final int course, final int height,
+                                        final int amountSatellites) {
+        final DataEntity mockedData = mock(DataEntity.class);
         when(mockedData.getId()).thenReturn(id);
         when(mockedData.getDateTime()).thenReturn(dateTime);
         when(mockedData.getLatitude()).thenReturn(latitude);

@@ -1,25 +1,25 @@
 package by.zuevvlad.wialontransport.builder.entity;
 
 import by.zuevvlad.wialontransport.builder.Builder;
-import by.zuevvlad.wialontransport.entity.Tracker;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.TrackerEntity;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 
 import static java.time.LocalDateTime.MIN;
 
-public final class DataBuilder implements Builder<Data> {
+public final class DataBuilder implements Builder<DataEntity> {
     private static final long NOT_DEFINED_VALUE_ID = Long.MIN_VALUE;
     private static final LocalDateTime NOT_DEFINED_VALUE_DATE_TIME = MIN;
     private static final int NOT_DEFINED_VALUE_SPEED = Integer.MIN_VALUE;
     private static final int NOT_DEFINED_VALUE_COURSE = Integer.MIN_VALUE;
     private static final int NOT_DEFINED_VALUE_HEIGHT = Integer.MIN_VALUE;
     private static final int NOT_DEFINED_VALUE_AMOUNT_SATELLITES = Integer.MIN_VALUE;
-    private static final Supplier<Tracker> NOT_DEFINED_TRACKER_SUPPLIER = Tracker::new;
+    private static final Supplier<TrackerEntity> NOT_DEFINED_TRACKER_SUPPLIER = TrackerEntity::new;
 
     private long id;
     private LocalDateTime dateTime;
@@ -29,7 +29,7 @@ public final class DataBuilder implements Builder<Data> {
     private int course;
     private int height;
     private int amountSatellites;
-    private Tracker tracker;
+    private TrackerEntity tracker;
 
     public DataBuilder() {
         this.id = NOT_DEFINED_VALUE_ID;
@@ -83,14 +83,14 @@ public final class DataBuilder implements Builder<Data> {
         return this;
     }
 
-    public DataBuilder catalogTracker(final Tracker tracker) {
+    public DataBuilder catalogTracker(final TrackerEntity tracker) {
         this.tracker = tracker;
         return this;
     }
 
     @Override
-    public Data build() {
-        return new Data(this.id, this.dateTime, this.latitude, this.longitude, this.speed, this.course,
+    public DataEntity build() {
+        return new DataEntity(this.id, this.dateTime, this.latitude, this.longitude, this.speed, this.course,
                 this.height, this.amountSatellites, this.tracker);
     }
 }

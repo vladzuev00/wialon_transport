@@ -1,15 +1,15 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component;
 
 import by.zuevvlad.wialontransport.builder.ParameterBuilder;
-import by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
-import by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.NOT_DEFINED;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.findByValue;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.NOT_DEFINED;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.findByValue;
 import static java.lang.Byte.parseByte;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;

@@ -1,10 +1,10 @@
 package by.zuevvlad.wialontransport.kafka.amountbytesfounder;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-public final class AmountDataBytesFounder implements AmountObjectBytesFounder<Data> {
+public final class AmountDataBytesFounder implements AmountObjectBytesFounder<DataEntity> {
     private static final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
     private static final byte[] DATE_TIME_PATTERN_BYTES = DATE_TIME_PATTERN.getBytes(UTF_8);
     static final int AMOUNT_OF_BYTES =
@@ -23,7 +23,7 @@ public final class AmountDataBytesFounder implements AmountObjectBytesFounder<Da
                     + Integer.BYTES                               //Data::height
                     + Integer.BYTES;                              //Data::amountOfSatellites
 
-    public static AmountObjectBytesFounder<Data> create() {
+    public static AmountObjectBytesFounder<DataEntity> create() {
         return SingletonHolder.AMOUNT_DATA_BYTES_FOUNDER;
     }
 
@@ -32,11 +32,11 @@ public final class AmountDataBytesFounder implements AmountObjectBytesFounder<Da
     }
 
     @Override
-    public int find(final Data data) {
+    public int find(final DataEntity data) {
         return AMOUNT_OF_BYTES;  //is fixed
     }
 
     private static final class SingletonHolder {
-        private static final AmountObjectBytesFounder<Data> AMOUNT_DATA_BYTES_FOUNDER = new AmountDataBytesFounder();
+        private static final AmountObjectBytesFounder<DataEntity> AMOUNT_DATA_BYTES_FOUNDER = new AmountDataBytesFounder();
     }
 }

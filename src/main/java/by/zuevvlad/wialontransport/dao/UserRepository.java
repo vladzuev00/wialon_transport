@@ -11,11 +11,11 @@ import by.zuevvlad.wialontransport.dao.resultsetmapper.ResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.UserResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.UserResultRowMapper;
-import by.zuevvlad.wialontransport.entity.User;
+import by.zuevvlad.wialontransport.entity.UserEntity;
 
 import java.util.logging.Logger;
 
-public final class UserRepository extends AbstractEntityRepository<User> {
+public final class UserRepository extends AbstractEntityRepository<UserEntity> {
     private static final String QUERY_TO_SELECT_BY_ID = "SELECT users.id, users.email, users.encrypted_password, "
             + "users.role FROM users WHERE users.id = ?";
 
@@ -37,17 +37,17 @@ public final class UserRepository extends AbstractEntityRepository<User> {
     private static final String QUERY_TO_DELETE_BY_ID = "DELETE FROM users WHERE users.id = ?";
 
     private UserRepository(final DataBaseConnectionPool dataBaseConnectionPool,
-                           final ResultRowMapper<User> userResultRowMapper,
-                           final ResultSetMapper<User> userResultSetMapper,
+                           final ResultRowMapper<UserEntity> userResultRowMapper,
+                           final ResultSetMapper<UserEntity> userResultSetMapper,
                            final FounderGeneratedId<Long> founderGeneratedId,
-                           final EntityInjectorInPreparedStatement<User> entityInjectorToInsert,
-                           final EntityInjectorInPreparedStatement<User> entityInjectorToUpdate,
+                           final EntityInjectorInPreparedStatement<UserEntity> entityInjectorToInsert,
+                           final EntityInjectorInPreparedStatement<UserEntity> entityInjectorToUpdate,
                            final Logger logger) {
         super(dataBaseConnectionPool, userResultRowMapper, userResultSetMapper, founderGeneratedId,
                 entityInjectorToInsert, entityInjectorToUpdate, logger);
     }
 
-    public static EntityRepository<User> create() {
+    public static EntityRepository<UserEntity> create() {
         return SingletonHolder.USER_REPOSITORY;
     }
 
@@ -77,7 +77,7 @@ public final class UserRepository extends AbstractEntityRepository<User> {
     }
 
     private static final class SingletonHolder {
-        private static final EntityRepository<User> USER_REPOSITORY = new UserRepository(
+        private static final EntityRepository<UserEntity> USER_REPOSITORY = new UserRepository(
                 DataBaseConnectionPoolImplementation.create(),
                 UserResultRowMapper.create(),
                 UserResultSetMapper.create(),

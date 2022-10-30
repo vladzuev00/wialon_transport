@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.junit.Test;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -14,7 +14,7 @@ public final class DataResultRowMapperIntegrationTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<ResultRowMapper<Data>> createdRowMappers = new ArrayBlockingQueue<>(startedThreadAmount);
+        final BlockingQueue<ResultRowMapper<DataEntity>> createdRowMappers = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
                 try {

@@ -49,7 +49,7 @@ public final class InboundPackageDecoderTest {
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
                 try {
-                    createdInboundPackageDecoders.put(InboundPackageDecoder.create());
+                    createdInboundPackageDecoders.put(null);
                 } catch (final InterruptedException cause) {
                     throw new RuntimeException(cause);
                 }

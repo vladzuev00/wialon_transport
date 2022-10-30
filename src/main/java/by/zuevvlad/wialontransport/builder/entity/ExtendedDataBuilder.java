@@ -1,24 +1,24 @@
 package by.zuevvlad.wialontransport.builder.entity;
 
 import by.zuevvlad.wialontransport.builder.Builder;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
 import static java.util.Collections.emptyList;
 
-public final class ExtendedDataBuilder implements Builder<ExtendedData> {
-    private static final Supplier<Data> NOT_DEFINED_DATA_SUPPLIER = Data::new;
+public final class ExtendedDataBuilder implements Builder<ExtendedDataEntity> {
+    private static final Supplier<DataEntity> NOT_DEFINED_DATA_SUPPLIER = DataEntity::new;
     private static final double NOT_DEFINED_VALUE_REDUCTION_PRECISION = Double.MIN_VALUE;
     private static final int NOT_DEFINED_VALUE_INPUTS = Integer.MIN_VALUE;
     private static final int NOT_DEFINED_VALUE_OUTPUTS = Integer.MIN_VALUE;
     private static final Supplier<double[]> NOT_DEFINED_VALUE_ANALOG_INPUTS_SUPPLIER = () -> new double[0];
     private static final String NOT_DEFINED_DRIVER_KEY_CODE = "not defined";
 
-    private Data data;
+    private DataEntity data;
     private double reductionPrecision;
     private int inputs;
     private int outputs;
@@ -66,14 +66,14 @@ public final class ExtendedDataBuilder implements Builder<ExtendedData> {
         return this;
     }
 
-    public ExtendedDataBuilder catalogData(final Data data) {
+    public ExtendedDataBuilder catalogData(final DataEntity data) {
         this.data = data;
         return this;
     }
 
     @Override
-    public ExtendedData build() {
-        return new ExtendedData(this.data, this.reductionPrecision, this.inputs, this.outputs,
+    public ExtendedDataEntity build() {
+        return new ExtendedDataEntity(this.data, this.reductionPrecision, this.inputs, this.outputs,
                 this.analogInputs, this.driverKeyCode, this.parameters);
     }
 }

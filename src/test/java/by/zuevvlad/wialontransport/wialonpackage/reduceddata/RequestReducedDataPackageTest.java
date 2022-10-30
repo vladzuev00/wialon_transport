@@ -3,14 +3,14 @@ package by.zuevvlad.wialontransport.wialonpackage.reduceddata;
 import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static org.junit.Assert.assertEquals;
 
 public final class RequestReducedDataPackageTest {
@@ -26,14 +26,14 @@ public final class RequestReducedDataPackageTest {
 
     @Test
     public void requestReducedDataPackageShouldBeSerialized() {
-        final Data data = this.createData();
+        final DataEntity data = this.createData();
         final RequestReducedDataPackage requestReducedDataPackage = new RequestReducedDataPackage(data);
         final String actual = requestReducedDataPackage.serialize();
         final String expected = "#SD#121103;113013;2324.25;N;02627.28;E;29;55;30;31\r\n";
         assertEquals(expected, actual);
     }
 
-    private Data createData() {
+    private DataEntity createData() {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();

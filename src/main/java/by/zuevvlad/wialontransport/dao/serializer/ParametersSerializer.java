@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.dao.serializer;
 
-import by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
-import by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType;
 
 import java.util.List;
 

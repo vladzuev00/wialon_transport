@@ -3,15 +3,15 @@ package by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper;
 import by.zuevvlad.wialontransport.dao.cryptographer.Cryptographer;
 import by.zuevvlad.wialontransport.dao.cryptographer.StringToStringCryptographer;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.exception.ResultSetMappingException;
-import by.zuevvlad.wialontransport.entity.User;
-import by.zuevvlad.wialontransport.entity.User.Role;
+import by.zuevvlad.wialontransport.entity.UserEntity;
+import by.zuevvlad.wialontransport.entity.UserEntity.Role;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static by.zuevvlad.wialontransport.entity.User.Role.valueOf;
+import static by.zuevvlad.wialontransport.entity.UserEntity.Role.valueOf;
 
-public final class UserResultRowMapper implements ResultRowMapper<User> {
+public final class UserResultRowMapper implements ResultRowMapper<UserEntity> {
     private static final String COLUMN_NAME_ID = "id";
     private static final String COLUMN_NAME_EMAIL = "email";
     private static final String COLUMN_NAME_ENCRYPTED_PASSWORD = "encrypted_password";
@@ -23,12 +23,12 @@ public final class UserResultRowMapper implements ResultRowMapper<User> {
         this.cryptographer = cryptographer;
     }
 
-    public static ResultRowMapper<User> create() {
+    public static ResultRowMapper<UserEntity> create() {
         return SingletonHolder.USER_RESULT_ROW_MAPPER;
     }
 
     @Override
-    public User map(final ResultSet resultSet) {
+    public UserEntity map(final ResultSet resultSet) {
         try {
             final long id = resultSet.getLong(COLUMN_NAME_ID);
             final String email = resultSet.getString(COLUMN_NAME_EMAIL);
@@ -39,14 +39,14 @@ public final class UserResultRowMapper implements ResultRowMapper<User> {
             final String roleName = resultSet.getString(COLUMN_NAME_ROLE);
             final Role role = valueOf(roleName);
 
-            return new User(id, email, password, role);
+            return new UserEntity(id, email, password, role);
         } catch (final SQLException cause) {
             throw new ResultSetMappingException(cause);
         }
     }
 
     private static final class SingletonHolder {
-        private static final ResultRowMapper<User> USER_RESULT_ROW_MAPPER = new UserResultRowMapper(
+        private static final ResultRowMapper<UserEntity> USER_RESULT_ROW_MAPPER = new UserResultRowMapper(
                 StringToStringCryptographer.create());
     }
 }

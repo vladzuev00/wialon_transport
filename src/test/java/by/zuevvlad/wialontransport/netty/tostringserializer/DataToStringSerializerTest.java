@@ -3,7 +3,7 @@ package by.zuevvlad.wialontransport.netty.tostringserializer;
 import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
@@ -15,15 +15,15 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.*;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.SOUTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.SOUTH;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.junit.Assert.assertEquals;
 import static java.lang.Class.forName;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 
 public final class DataToStringSerializerTest {
     private static final String CLASS_NAME_LATITUDE_TO_STRING_SERIALIZER
@@ -46,7 +46,7 @@ public final class DataToStringSerializerTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<ToStringSerializer<Data>> createdSerializers
+        final BlockingQueue<ToStringSerializer<DataEntity>> createdSerializers
                 = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
@@ -103,7 +103,7 @@ public final class DataToStringSerializerTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(parse("12.11.2003 11:30:13", DATE_TIME_FORMATTER))
                 .catalogLatitude(latitudeBuilder
@@ -123,7 +123,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;113013;1011.12;S;01314.15;E;16;17;18;19";
         assertEquals(expected, actual);
@@ -138,7 +138,7 @@ public final class DataToStringSerializerTest {
         final LocalTime time = LocalTime.of(11, 30, 13);
         final LocalDateTime dateTime = LocalDateTime.of(NOT_DEFINED_DATE, time);
 
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(dateTime)
                 .catalogLatitude(latitudeBuilder
@@ -158,7 +158,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "NA;113013;1011.12;S;01314.15;E;16;17;18;19";
         assertEquals(expected, actual);
@@ -173,7 +173,7 @@ public final class DataToStringSerializerTest {
         final LocalDate date = LocalDate.of(2003, 11, 12);
         final LocalDateTime dateTime = LocalDateTime.of(date, NOT_DEFINED_TIME);
 
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(dateTime)
                 .catalogLatitude(latitudeBuilder
@@ -193,7 +193,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;NA;1011.12;S;01314.15;E;16;17;18;19";
         assertEquals(expected, actual);
@@ -203,7 +203,7 @@ public final class DataToStringSerializerTest {
     public void dataWithNotDefinedLatitudeShouldBeSerialized() {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(parse("12.11.2003 11:30:13", DATE_TIME_FORMATTER))
                 .catalogLatitude(NOT_DEFINED_LATITUDE_SUPPLIER.get())
@@ -218,7 +218,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;113013;NA;NA;01314.15;E;16;17;18;19";
         assertEquals(expected, actual);
@@ -228,7 +228,7 @@ public final class DataToStringSerializerTest {
     public void dataWithNotDefinedLongitudeShouldBeSerialized() {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(parse("12.11.2003 11:30:13", DATE_TIME_FORMATTER))
                 .catalogLatitude(latitudeBuilder
@@ -243,7 +243,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;113013;1011.12;S;NA;NA;16;17;18;19";
         assertEquals(expected, actual);
@@ -254,7 +254,7 @@ public final class DataToStringSerializerTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(parse("12.11.2003 11:30:13", DATE_TIME_FORMATTER))
                 .catalogLatitude(latitudeBuilder
@@ -274,7 +274,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;113013;1011.12;S;01314.15;E;NA;17;18;19";
         assertEquals(expected, actual);
@@ -285,7 +285,7 @@ public final class DataToStringSerializerTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(parse("12.11.2003 11:30:13", DATE_TIME_FORMATTER))
                 .catalogLatitude(latitudeBuilder
@@ -305,7 +305,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;113013;1011.12;S;01314.15;E;16;NA;18;19";
         assertEquals(expected, actual);
@@ -316,7 +316,7 @@ public final class DataToStringSerializerTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(parse("12.11.2003 11:30:13", DATE_TIME_FORMATTER))
                 .catalogLatitude(latitudeBuilder
@@ -336,7 +336,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(NOT_DEFINED_HEIGHT)
                 .catalogAmountSatellites(19)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;113013;1011.12;S;01314.15;E;16;17;NA;19";
         assertEquals(expected, actual);
@@ -347,7 +347,7 @@ public final class DataToStringSerializerTest {
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final Data data = dataBuilder
+        final DataEntity data = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(parse("12.11.2003 11:30:13", DATE_TIME_FORMATTER))
                 .catalogLatitude(latitudeBuilder
@@ -367,7 +367,7 @@ public final class DataToStringSerializerTest {
                 .catalogHeight(18)
                 .catalogAmountSatellites(NOT_DEFINED_AMOUNT_SATELLITES)
                 .build();
-        final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
         final String actual = dataToStringSerializer.serialize(data);
         final String expected = "121103;113013;1011.12;S;01314.15;E;16;17;18;NA";
         assertEquals(expected, actual);

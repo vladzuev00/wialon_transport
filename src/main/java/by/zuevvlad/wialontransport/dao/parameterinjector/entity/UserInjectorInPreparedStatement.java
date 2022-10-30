@@ -2,13 +2,13 @@ package by.zuevvlad.wialontransport.dao.parameterinjector.entity;
 
 import by.zuevvlad.wialontransport.dao.cryptographer.Cryptographer;
 import by.zuevvlad.wialontransport.dao.parameterinjector.exception.InjectionParameterPreparedStatementException;
-import by.zuevvlad.wialontransport.entity.User;
-import by.zuevvlad.wialontransport.entity.User.Role;
+import by.zuevvlad.wialontransport.entity.UserEntity;
+import by.zuevvlad.wialontransport.entity.UserEntity.Role;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public final class UserInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<User> {
+public final class UserInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<UserEntity> {
     private final int parameterIndexEmail;
     private final int parameterIndexEncryptedPassword;
     private final int parameterIndexRole;
@@ -34,7 +34,7 @@ public final class UserInjectorInPreparedStatement extends EntityInjectorInPrepa
     }
 
     @Override
-    public void inject(final User injectedUser, final PreparedStatement preparedStatement) {
+    public void inject(final UserEntity injectedUser, final PreparedStatement preparedStatement) {
         try {
             super.inject(injectedUser, preparedStatement);
             preparedStatement.setString(this.parameterIndexEmail, injectedUser.getEmail());

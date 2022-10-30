@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.wialonpackage.data;
 
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.tostringserializer.ExtendedDataToStringSerializer;
 import by.zuevvlad.wialontransport.netty.tostringserializer.ToStringSerializer;
 import by.zuevvlad.wialontransport.wialonpackage.Package;
@@ -16,13 +16,13 @@ public final class RequestDataPackage implements Package {
     private static final ToStringSerializer<RequestDataPackage> REQUEST_DATA_PACKAGE_TO_STRING_SERIALIZER
             = new RequestDataPackageToStringSerializer(ExtendedDataToStringSerializer.create());
 
-    private final ExtendedData extendedData;
+    private final ExtendedDataEntity extendedData;
 
-    public RequestDataPackage(final ExtendedData extendedData) {
+    public RequestDataPackage(final ExtendedDataEntity extendedData) {
         this.extendedData = extendedData;
     }
 
-    public ExtendedData getExtendedData() {
+    public ExtendedDataEntity getExtendedData() {
         return this.extendedData;
     }
 
@@ -60,10 +60,10 @@ public final class RequestDataPackage implements Package {
         //%s - serialized extended data
         private static final String SERIALIZED_REQUEST_DATA_PACKAGE_TEMPLATE = "#D#%s\r\n";
 
-        private final ToStringSerializer<ExtendedData> extendedDataToStringSerializer;
+        private final ToStringSerializer<ExtendedDataEntity> extendedDataToStringSerializer;
 
         public RequestDataPackageToStringSerializer(
-                final ToStringSerializer<ExtendedData> extendedDataToStringSerializer) {
+                final ToStringSerializer<ExtendedDataEntity> extendedDataToStringSerializer) {
             this.extendedDataToStringSerializer = extendedDataToStringSerializer;
         }
 

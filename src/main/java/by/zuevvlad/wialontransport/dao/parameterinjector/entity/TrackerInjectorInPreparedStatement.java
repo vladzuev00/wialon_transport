@@ -2,13 +2,13 @@ package by.zuevvlad.wialontransport.dao.parameterinjector.entity;
 
 import by.zuevvlad.wialontransport.dao.cryptographer.Cryptographer;
 import by.zuevvlad.wialontransport.dao.parameterinjector.exception.InjectionParameterPreparedStatementException;
-import by.zuevvlad.wialontransport.entity.Tracker;
-import by.zuevvlad.wialontransport.entity.User;
+import by.zuevvlad.wialontransport.entity.TrackerEntity;
+import by.zuevvlad.wialontransport.entity.UserEntity;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public final class TrackerInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<Tracker> {
+public final class TrackerInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<TrackerEntity> {
     private final int parameterIndexImei;
     private final int parameterIndexEncryptedPassword;
     private final int parameterIndexPhoneNumber;
@@ -38,7 +38,7 @@ public final class TrackerInjectorInPreparedStatement extends EntityInjectorInPr
     }
 
     @Override
-    public void inject(final Tracker injectedTracker, final PreparedStatement preparedStatement) {
+    public void inject(final TrackerEntity injectedTracker, final PreparedStatement preparedStatement) {
         try {
             super.inject(injectedTracker, preparedStatement);
             preparedStatement.setString(this.parameterIndexImei, injectedTracker.getImei());
@@ -48,7 +48,7 @@ public final class TrackerInjectorInPreparedStatement extends EntityInjectorInPr
 
             preparedStatement.setString(this.parameterIndexPhoneNumber, injectedTracker.getPassword());
 
-            final User user = injectedTracker.getUser();
+            final UserEntity user = injectedTracker.getUser();
             preparedStatement.setLong(this.parameterIndexUserId, user.getId());
         } catch (final SQLException cause) {
             throw new InjectionParameterPreparedStatementException(cause);

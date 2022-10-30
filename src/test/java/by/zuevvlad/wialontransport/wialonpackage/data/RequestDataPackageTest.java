@@ -5,16 +5,16 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.entity.ExtendedDataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.INTEGER;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.STRING;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.INTEGER;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.STRING;
 import static java.util.List.of;
 import static org.junit.Assert.assertEquals;
 
@@ -35,7 +35,7 @@ public final class RequestDataPackageTest {
 
     @Test
     public void requestDataPackageShouldBeSerialized() {
-        final ExtendedData extendedData = this.createExtendedData(255);
+        final ExtendedDataEntity extendedData = this.createExtendedData(255);
         final RequestDataPackage requestDataPackage = new RequestDataPackage(extendedData);
         final String actual = requestDataPackage.serialize();
         final String expected = "#D#121103;113013;2324.25;N;02627.28;E;29;55;30;31;32.0;33;34;1.0,2.0,3.0;first driver key code;first parameter:1:36,second parameter:3:37\r\n";
@@ -43,7 +43,7 @@ public final class RequestDataPackageTest {
     }
 
     @SuppressWarnings("all")
-    private ExtendedData createExtendedData(final long id) {
+    private ExtendedDataEntity createExtendedData(final long id) {
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();

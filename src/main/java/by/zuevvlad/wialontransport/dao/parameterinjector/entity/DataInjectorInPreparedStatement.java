@@ -5,16 +5,16 @@ import by.zuevvlad.wialontransport.dao.parameterinjector.DateTimeInjectorInPrepa
 import by.zuevvlad.wialontransport.dao.parameterinjector.exception.InjectionParameterPreparedStatementException;
 import by.zuevvlad.wialontransport.dao.parameterinjector.geographiccoordinate.LatitudeInjectorInPreparedStatement;
 import by.zuevvlad.wialontransport.dao.parameterinjector.geographiccoordinate.LongitudeInjectorInPreparedStatement;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.Data.Latitude;
-import by.zuevvlad.wialontransport.entity.Data.Longitude;
-import by.zuevvlad.wialontransport.entity.Tracker;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
+import by.zuevvlad.wialontransport.entity.TrackerEntity;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public final class DataInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<Data> {
+public final class DataInjectorInPreparedStatement extends EntityInjectorInPreparedStatement<DataEntity> {
     private final int parameterIndexSpeed;
     private final int parameterIndexCourse;
     private final int parameterIndexHeight;
@@ -93,7 +93,7 @@ public final class DataInjectorInPreparedStatement extends EntityInjectorInPrepa
     }
 
     @Override
-    public void inject(final Data injectedData, final PreparedStatement preparedStatement) {
+    public void inject(final DataEntity injectedData, final PreparedStatement preparedStatement) {
         try {
             super.inject(injectedData, preparedStatement);
             preparedStatement.setInt(this.parameterIndexSpeed, injectedData.getSpeed());
@@ -101,7 +101,7 @@ public final class DataInjectorInPreparedStatement extends EntityInjectorInPrepa
             preparedStatement.setInt(this.parameterIndexHeight, injectedData.getHeight());
             preparedStatement.setInt(this.parameterIndexAmountSatellites, injectedData.getAmountSatellites());
 
-            final Tracker tracker = injectedData.getTracker();
+            final TrackerEntity tracker = injectedData.getTracker();
             preparedStatement.setLong(this.parameterIndexTrackerId, tracker.getId());
 
             this.dateTimeInjector.inject(injectedData.getDateTime(), preparedStatement);

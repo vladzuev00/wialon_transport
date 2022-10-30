@@ -6,8 +6,8 @@ import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder
 import by.zuevvlad.wialontransport.dao.EntityRepository;
 import by.zuevvlad.wialontransport.dao.TrackerRepository;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.exception.ResultSetMappingException;
-import by.zuevvlad.wialontransport.entity.Tracker;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.TrackerEntity;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,12 +18,12 @@ import java.time.LocalTime;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.of;
 
-public final class DataResultRowMapper implements ResultRowMapper<Data> {
+public final class DataResultRowMapper implements ResultRowMapper<DataEntity> {
     private static final String TEMPLATE_EXCEPTION_DESCRIPTION_NO_TRACKER = "No tracker with id '%d'";
 
     private static final String COLUMN_NAME_ID = "id";
@@ -36,17 +36,17 @@ public final class DataResultRowMapper implements ResultRowMapper<Data> {
     private final ResultRowMapper<LocalDateTime> dateTimeResultRowMapper;
     private final ResultRowMapper<Latitude> latitudeResultRowMapper;
     private final ResultRowMapper<Longitude> longitudeResultRowMapper;
-    private final EntityRepository<Tracker> trackerRepository;
+    private final EntityRepository<TrackerEntity> trackerRepository;
     private final Supplier<DataBuilder> dataBuilderSupplier;
 
-    public static ResultRowMapper<Data> create() {
+    public static ResultRowMapper<DataEntity> create() {
         return SingletonHolder.DATA_RESULT_ROW_MAPPER;
     }
 
     private DataResultRowMapper(final ResultRowMapper<LocalDateTime> dateTimeResultRowMapper,
                                 final ResultRowMapper<Latitude> latitudeResultRowMapper,
                                 final ResultRowMapper<Longitude> longitudeResultRowMapper,
-                                final EntityRepository<Tracker> trackerRepository,
+                                final EntityRepository<TrackerEntity> trackerRepository,
                                 final Supplier<DataBuilder> dataBuilderSupplier) {
         this.dateTimeResultRowMapper = dateTimeResultRowMapper;
         this.latitudeResultRowMapper = latitudeResultRowMapper;
@@ -56,7 +56,7 @@ public final class DataResultRowMapper implements ResultRowMapper<Data> {
     }
 
     @Override
-    public Data map(final ResultSet resultSet) {
+    public DataEntity map(final ResultSet resultSet) {
         try {
             final long id = resultSet.getLong(COLUMN_NAME_ID);
             final LocalDateTime dateTime = this.dateTimeResultRowMapper.map(resultSet);
@@ -68,8 +68,8 @@ public final class DataResultRowMapper implements ResultRowMapper<Data> {
             final int amountSatellites = resultSet.getInt(COLUMN_NAME_AMOUNT_SATELLITES);
 
             final long trackerId = resultSet.getLong(COLUMN_NAME_TRACKER_ID);
-            final Optional<Tracker> optionalTracker = this.trackerRepository.findById(trackerId);
-            final Tracker tracker = optionalTracker
+            final Optional<TrackerEntity> optionalTracker = this.trackerRepository.findById(trackerId);
+            final TrackerEntity tracker = optionalTracker
                     .orElseThrow(() -> new ResultSetMappingException(
                             format(TEMPLATE_EXCEPTION_DESCRIPTION_NO_TRACKER, trackerId)));
 
@@ -178,7 +178,7 @@ public final class DataResultRowMapper implements ResultRowMapper<Data> {
     }
 
     private static final class SingletonHolder {
-        public static final ResultRowMapper<Data> DATA_RESULT_ROW_MAPPER = new DataResultRowMapper(
+        public static final ResultRowMapper<DataEntity> DATA_RESULT_ROW_MAPPER = new DataResultRowMapper(
                 new DateTimeResultRowMapper(),
                 new LatitudeResultRowMapper(LatitudeBuilder::new),
                 new LongitudeResultRowMapper(LongitudeBuilder::new),

@@ -1,25 +1,25 @@
 package by.zuevvlad.wialontransport.netty.tostringserializer;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static by.zuevvlad.wialontransport.entity.Data.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.*;
 import static by.zuevvlad.wialontransport.netty.tostringserializer.configuration.SerializationDataConfiguration.*;
 import static java.lang.String.format;
 import static java.lang.String.join;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
-public final class DataToStringSerializer implements ToStringSerializer<Data> {
+public final class DataToStringSerializer implements ToStringSerializer<DataEntity> {
     private final DateTimeFormatter dateFormatter;
     private final DateTimeFormatter timeFormatter;
     private final ToStringSerializer<Latitude> latitudeToStringSerializer;
     private final ToStringSerializer<Longitude> longitudeToStringSerializer;
 
-    public static ToStringSerializer<Data> create() {
+    public static ToStringSerializer<DataEntity> create() {
         return SingletonHolder.DATA_TO_STRING_SERIALIZER;
     }
 
@@ -33,7 +33,7 @@ public final class DataToStringSerializer implements ToStringSerializer<Data> {
     }
 
     @Override
-    public String serialize(final Data serializedData) {
+    public String serialize(final DataEntity serializedData) {
         final String serializedDate = this.findSerializedDate(serializedData);
         final String serializedTime = this.findSerializedTime(serializedData);
         final String serializedLatitude = this.findSerializedLatitude(serializedData);
@@ -46,7 +46,7 @@ public final class DataToStringSerializer implements ToStringSerializer<Data> {
                 serializedLongitude, serializedSpeed, serializedCourse, serializedHeight, serializedAmountSatellites);
     }
 
-    private String findSerializedDate(final Data serializedData) {
+    private String findSerializedDate(final DataEntity serializedData) {
         final LocalDateTime dateTime = serializedData.getDateTime();
         final LocalDate date = dateTime.toLocalDate();
         return !date.equals(NOT_DEFINED_DATE)
@@ -54,7 +54,7 @@ public final class DataToStringSerializer implements ToStringSerializer<Data> {
                 : SERIALIZED_NOT_DEFINED_VALUE.getValue();
     }
 
-    private String findSerializedTime(final Data serializedData) {
+    private String findSerializedTime(final DataEntity serializedData) {
         final LocalDateTime dateTime = serializedData.getDateTime();
         final LocalTime time = dateTime.toLocalTime();
         return !time.equals(NOT_DEFINED_TIME)
@@ -62,42 +62,42 @@ public final class DataToStringSerializer implements ToStringSerializer<Data> {
                 : SERIALIZED_NOT_DEFINED_VALUE.getValue();
     }
 
-    private String findSerializedLatitude(final Data serializedData) {
+    private String findSerializedLatitude(final DataEntity serializedData) {
         final Latitude latitude = serializedData.getLatitude();
         return !latitude.equals(NOT_DEFINED_LATITUDE_SUPPLIER.get())
                 ? this.latitudeToStringSerializer.serialize(latitude)
                 : SERIALIZED_NOT_DEFINED_GEOGRAPHIC_COORDINATE.getValue();
     }
 
-    private String findSerializedLongitude(final Data serializedData) {
+    private String findSerializedLongitude(final DataEntity serializedData) {
         final Longitude longitude = serializedData.getLongitude();
         return !longitude.equals(NOT_DEFINED_LONGITUDE_SUPPLIER.get())
                 ? this.longitudeToStringSerializer.serialize(longitude)
                 : SERIALIZED_NOT_DEFINED_GEOGRAPHIC_COORDINATE.getValue();
     }
 
-    private String findSerializedSpeed(final Data serializedData) {
+    private String findSerializedSpeed(final DataEntity serializedData) {
         final int speed = serializedData.getSpeed();
         return speed != NOT_DEFINED_SPEED
                 ? Integer.toString(speed)
                 : SERIALIZED_NOT_DEFINED_VALUE.getValue();
     }
 
-    private String findSerializedCourse(final Data serializedData) {
+    private String findSerializedCourse(final DataEntity serializedData) {
         final int course = serializedData.getCourse();
         return course != NOT_DEFINED_COURSE
                 ? Integer.toString(course)
                 : SERIALIZED_NOT_DEFINED_VALUE.getValue();
     }
 
-    private String findSerializedHeight(final Data serializedData) {
+    private String findSerializedHeight(final DataEntity serializedData) {
         final int height = serializedData.getHeight();
         return height != NOT_DEFINED_HEIGHT
                 ? Integer.toString(height)
                 : SERIALIZED_NOT_DEFINED_VALUE.getValue();
     }
 
-    private String findSerializedAmountSatellites(final Data serializedData) {
+    private String findSerializedAmountSatellites(final DataEntity serializedData) {
         final int amountSatellites = serializedData.getAmountSatellites();
         return amountSatellites != NOT_DEFINED_AMOUNT_SATELLITES
                 ? Integer.toString(amountSatellites)
@@ -127,7 +127,7 @@ public final class DataToStringSerializer implements ToStringSerializer<Data> {
     }
 
     private static final class SingletonHolder {
-        private static final ToStringSerializer<Data> DATA_TO_STRING_SERIALIZER
+        private static final ToStringSerializer<DataEntity> DATA_TO_STRING_SERIALIZER
                 = new DataToStringSerializer(ofPattern(DATE_FORMAT.getValue()), ofPattern(TIME_FORMAT.getValue()),
                 new LatitudeToStringSerializer(), new LongitudeToStringSerializer());
     }

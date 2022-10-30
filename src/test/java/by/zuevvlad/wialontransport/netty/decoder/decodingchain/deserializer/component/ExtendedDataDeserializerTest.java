@@ -5,7 +5,7 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.entity.ExtendedDataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import org.junit.Test;
 
@@ -17,17 +17,17 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.*;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.*;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.*;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.*;
 import static java.util.Collections.emptyList;
 import static java.util.stream.IntStream.rangeClosed;
 import static org.junit.Assert.assertEquals;
 
 public final class ExtendedDataDeserializerTest {
-    private final Deserializer<ExtendedData> extendedDataDeserializer;
+    private final Deserializer<ExtendedDataEntity> extendedDataDeserializer;
     private final Supplier<ExtendedDataBuilder> extendedDataBuilderSupplier;
     private final Supplier<DataBuilder> dataBuilderSupplier;
     private final Supplier<LatitudeBuilder> latitudeBuilderSupplier;
@@ -46,7 +46,7 @@ public final class ExtendedDataDeserializerTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<Deserializer<ExtendedData>> createdDeserializers
+        final BlockingQueue<Deserializer<ExtendedDataEntity>> createdDeserializers
                 = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
@@ -73,14 +73,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -133,14 +133,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(NOT_DEFINED_DATE, LocalTime.of(14, 56, 43)))
                         .catalogLatitude(latitudeBuilder
@@ -193,14 +193,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(LocalDate.of(2022, 11, 15), NOT_DEFINED_TIME))
                         .catalogLatitude(latitudeBuilder
@@ -253,14 +253,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder.build())
@@ -308,14 +308,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -363,14 +363,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -423,14 +423,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -483,14 +483,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -543,14 +543,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -603,14 +603,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -663,14 +663,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -723,14 +723,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -783,14 +783,14 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -843,14 +843,14 @@ public final class ExtendedDataDeserializerTest {
                 + "NA;"
                 + "param-name:1:654321,param-name:2:65.4321,param-name:3:param-value";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder
@@ -903,13 +903,13 @@ public final class ExtendedDataDeserializerTest {
                 + "keydrivercode;"
                 + "";
 
-        final ExtendedData actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
+        final ExtendedDataEntity actual = this.extendedDataDeserializer.deserialize(givenDeserialized);
 
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
-        final ExtendedData expected = extendedDataBuilder
+        final ExtendedDataEntity expected = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogDateTime(LocalDateTime.of(2022, 11, 15, 14, 56, 43))
                         .catalogLatitude(latitudeBuilder

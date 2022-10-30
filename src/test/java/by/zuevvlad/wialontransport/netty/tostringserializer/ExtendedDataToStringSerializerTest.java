@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.netty.tostringserializer;
 
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import org.junit.Test;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -14,7 +14,7 @@ public final class ExtendedDataToStringSerializerTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<ToStringSerializer<ExtendedData>> createdSerializers
+        final BlockingQueue<ToStringSerializer<ExtendedDataEntity>> createdSerializers
                 = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {

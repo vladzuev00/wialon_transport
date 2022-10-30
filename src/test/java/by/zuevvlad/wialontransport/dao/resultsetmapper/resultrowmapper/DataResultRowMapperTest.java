@@ -4,7 +4,7 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.exception.ResultSetMappingException;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static java.lang.Class.forName;
 import static java.sql.Timestamp.valueOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,8 +31,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.times;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 
 @RunWith(MockitoJUnitRunner.class)
 public final class DataResultRowMapperTest {
@@ -390,12 +390,12 @@ public final class DataResultRowMapperTest {
     @Test
     public void dataShouldBeMapped()
             throws Exception {
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
 
         final LatitudeBuilder latitudeBuilder = this.latitudeBuilderSupplier.get();
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
-        final Data expected = dataBuilder
+        final DataEntity expected = dataBuilder
                 .catalogId(255)
                 .catalogDateTime(LocalDateTime.of(2022, 10, 10, 10, 10, 10))
                 .catalogLatitude(latitudeBuilder
@@ -426,7 +426,7 @@ public final class DataResultRowMapperTest {
                 .thenReturn(expected.getAmountSatellites());
         when(this.mockedDataBuilder.build()).thenReturn(expected);
 
-        final Data actual = dataResultRowMapper.map(this.mockedResultSet);
+        final DataEntity actual = dataResultRowMapper.map(this.mockedResultSet);
         assertEquals(expected, actual);
 
         verify(this.mockedResultSet, times(1)).getLong(this.stringArgumentCaptor.capture());
@@ -485,7 +485,7 @@ public final class DataResultRowMapperTest {
     @Test(expected = ResultSetMappingException.class)
     public void dataShouldNotBeMappedBecauseOfId()
             throws Exception {
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
         when(this.mockedResultSet.getLong(anyString())).thenThrow(SQLException.class);
         dataResultRowMapper.map(this.mockedResultSet);
 
@@ -496,7 +496,7 @@ public final class DataResultRowMapperTest {
     @Test(expected = ResultSetMappingException.class)
     public void dataShouldNotBeMappedBecauseOfDateTime()
             throws Exception {
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
         when(this.mockedResultSet.getLong(anyString())).thenReturn(0L);
         when(this.mockedLocalDateTimeResultRowMapper.map(any(ResultSet.class)))
                 .thenThrow(ResultSetMappingException.class);
@@ -513,7 +513,7 @@ public final class DataResultRowMapperTest {
     @Test(expected = ResultSetMappingException.class)
     public void dataShouldNotBeMappedBecauseOfLatitude()
             throws Exception {
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
 
         when(this.mockedResultSet.getLong(anyString())).thenReturn(0L);
         when(this.mockedLocalDateTimeResultRowMapper.map(any(ResultSet.class))).thenReturn(now());
@@ -535,7 +535,7 @@ public final class DataResultRowMapperTest {
     @Test(expected = ResultSetMappingException.class)
     public void dataShouldNotBeMappedBecauseOfLongitude()
             throws Exception {
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
 
         when(this.mockedResultSet.getLong(anyString())).thenReturn(0L);
         when(this.mockedLocalDateTimeResultRowMapper.map(any(ResultSet.class))).thenReturn(now());
@@ -575,7 +575,7 @@ public final class DataResultRowMapperTest {
 
         when(this.mockedResultSet.getInt(anyString())).thenThrow(SQLException.class);
 
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
         dataResultRowMapper.map(this.mockedResultSet);
 
         verify(this.mockedResultSet, times(1)).getLong(this.stringArgumentCaptor.capture());
@@ -610,7 +610,7 @@ public final class DataResultRowMapperTest {
                 .thenReturn(0)
                 .thenThrow(SQLException.class);
 
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
         dataResultRowMapper.map(this.mockedResultSet);
 
         verify(this.mockedResultSet, times(1)).getLong(this.stringArgumentCaptor.capture());
@@ -647,7 +647,7 @@ public final class DataResultRowMapperTest {
                 .thenReturn(0)
                 .thenThrow(SQLException.class);
 
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
         dataResultRowMapper.map(this.mockedResultSet);
 
         verify(this.mockedResultSet, times(1)).getLong(this.stringArgumentCaptor.capture());
@@ -685,7 +685,7 @@ public final class DataResultRowMapperTest {
                 .thenReturn(0)
                 .thenThrow(SQLException.class);
 
-        final ResultRowMapper<Data> dataResultRowMapper = this.createDataResultRowMapper();
+        final ResultRowMapper<DataEntity> dataResultRowMapper = this.createDataResultRowMapper();
         dataResultRowMapper.map(this.mockedResultSet);
 
         verify(this.mockedResultSet, times(1)).getLong(this.stringArgumentCaptor.capture());
@@ -746,10 +746,10 @@ public final class DataResultRowMapperTest {
         return (ResultRowMapper<Longitude>) rowMapperConstructor.newInstance(this.mockedLongitudeBuilderSupplier);
     }
 
-    private ResultRowMapper<Data> createDataResultRowMapper()
+    private ResultRowMapper<DataEntity> createDataResultRowMapper()
             throws Exception {
-        final Class<? extends ResultRowMapper<Data>> rowMapperClass = DataResultRowMapper.class;
-        final Constructor<? extends ResultRowMapper<Data>> rowMapperConstructor
+        final Class<? extends ResultRowMapper<DataEntity>> rowMapperClass = DataResultRowMapper.class;
+        final Constructor<? extends ResultRowMapper<DataEntity>> rowMapperConstructor
                 = rowMapperClass.getDeclaredConstructor(ResultRowMapper.class, ResultRowMapper.class,
                 ResultRowMapper.class, Supplier.class);
 

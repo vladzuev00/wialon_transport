@@ -6,7 +6,7 @@ import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
 import by.zuevvlad.wialontransport.builder.entity.ExtendedDataBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
@@ -15,10 +15,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.*;
 import static java.lang.Class.forName;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
@@ -237,7 +237,7 @@ public final class AmountExtendedDataBytesFounderTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<AmountObjectBytesFounder<ExtendedData>> createdBytesFounders
+        final BlockingQueue<AmountObjectBytesFounder<ExtendedDataEntity>> createdBytesFounders
                 = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
@@ -266,7 +266,7 @@ public final class AmountExtendedDataBytesFounderTest {
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
 
-        final ExtendedData extendedData = extendedDataBuilder
+        final ExtendedDataEntity extendedData = extendedDataBuilder
                 .catalogData(dataBuilder
                         .catalogId(255)
                         .catalogDateTime(now())
@@ -304,7 +304,7 @@ public final class AmountExtendedDataBytesFounderTest {
                                 .build()
                 )).build();
 
-        final AmountObjectBytesFounder<ExtendedData> amountExtendedDataBytesFounder
+        final AmountObjectBytesFounder<ExtendedDataEntity> amountExtendedDataBytesFounder
                 = this.createAmountExtendedDataBytesFounder();
         final int actual = amountExtendedDataBytesFounder.find(extendedData);
         final int expected = Long.BYTES                      //Entity::id
@@ -386,11 +386,11 @@ public final class AmountExtendedDataBytesFounderTest {
                 .newInstance(amountParameterBytesFounder);
     }
 
-    private AmountObjectBytesFounder<ExtendedData> createAmountExtendedDataBytesFounder()
+    private AmountObjectBytesFounder<ExtendedDataEntity> createAmountExtendedDataBytesFounder()
             throws Exception {
-        final Class<? extends AmountObjectBytesFounder<ExtendedData>> amountExtendedDataBytesFounderClass
+        final Class<? extends AmountObjectBytesFounder<ExtendedDataEntity>> amountExtendedDataBytesFounderClass
                 = AmountExtendedDataBytesFounder.class;
-        final Constructor<? extends AmountObjectBytesFounder<ExtendedData>> amountExtendedDataBytesFounderConstructor
+        final Constructor<? extends AmountObjectBytesFounder<ExtendedDataEntity>> amountExtendedDataBytesFounderConstructor
                 = amountExtendedDataBytesFounderClass.getDeclaredConstructor(
                 AmountObjectBytesFounder.class,
                 AmountObjectBytesFounder.class,

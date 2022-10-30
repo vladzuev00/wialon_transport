@@ -7,7 +7,7 @@ import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.exception.ResultSetMappingException;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -21,15 +21,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.NORTH;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.EAST;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.NORTH;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.EAST;
 import static java.time.LocalDateTime.now;
 import static org.junit.Assert.assertEquals;
 import static java.util.List.of;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.INTEGER;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.STRING;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.DOUBLE;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.NOT_DEFINED;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.INTEGER;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.STRING;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.DOUBLE;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.NOT_DEFINED;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
@@ -48,7 +48,7 @@ public final class ExtendedDataResultSetMapperTest {
     private ResultSet mockedResultSet;
 
     @Mock
-    private ResultRowMapper<ExtendedData> mockedExtendedDataResultRowMapper;
+    private ResultRowMapper<ExtendedDataEntity> mockedExtendedDataResultRowMapper;
 
     @Captor
     private ArgumentCaptor<ResultSet> resultSetArgumentCaptor;
@@ -70,7 +70,7 @@ public final class ExtendedDataResultSetMapperTest {
         final ParameterBuilder parameterBuilder = this.parameterBuilderSupplier.get();
         final ExtendedDataBuilder extendedDataBuilder = this.extendedDataBuilderSupplier.get();
 
-        final List<ExtendedData> expected = of(
+        final List<ExtendedDataEntity> expected = of(
                 extendedDataBuilder
                         .catalogData(dataBuilder
                                 .catalogId(255)
@@ -156,8 +156,8 @@ public final class ExtendedDataResultSetMapperTest {
                 .thenReturn(expected.get(0))
                 .thenReturn(expected.get(1));
 
-        final ResultSetMapper<ExtendedData> extendedDataResultSetMapper = this.createResultSetMapper();
-        final List<ExtendedData> actual = extendedDataResultSetMapper.map(this.mockedResultSet);
+        final ResultSetMapper<ExtendedDataEntity> extendedDataResultSetMapper = this.createResultSetMapper();
+        final List<ExtendedDataEntity> actual = extendedDataResultSetMapper.map(this.mockedResultSet);
         assertEquals(expected, actual);
 
         verify(this.mockedResultSet, times(3)).next();
@@ -172,8 +172,8 @@ public final class ExtendedDataResultSetMapperTest {
     public void mappedDataListShouldBeEmpty()
             throws Exception {
         when(this.mockedResultSet.next()).thenReturn(false);
-        final ResultSetMapper<ExtendedData> extendedDataResultSetMapper = this.createResultSetMapper();
-        final List<ExtendedData> mappedExtendedDataList = extendedDataResultSetMapper.map(this.mockedResultSet);
+        final ResultSetMapper<ExtendedDataEntity> extendedDataResultSetMapper = this.createResultSetMapper();
+        final List<ExtendedDataEntity> mappedExtendedDataList = extendedDataResultSetMapper.map(this.mockedResultSet);
         assertTrue(mappedExtendedDataList.isEmpty());
 
         verify(this.mockedResultSet, times(1)).next();
@@ -183,16 +183,16 @@ public final class ExtendedDataResultSetMapperTest {
     public void extendedDataListShouldNotBeMappedBecauseOfExceptionDuringCallingNextOnResultSet()
             throws Exception {
         when(this.mockedResultSet.next()).thenThrow(SQLException.class);
-        final ResultSetMapper<ExtendedData> extendedDataResultSetMapper = this.createResultSetMapper();
+        final ResultSetMapper<ExtendedDataEntity> extendedDataResultSetMapper = this.createResultSetMapper();
         extendedDataResultSetMapper.map(this.mockedResultSet);
 
         verify(this.mockedResultSet, times(1)).next();
     }
 
-    private ResultSetMapper<ExtendedData> createResultSetMapper()
+    private ResultSetMapper<ExtendedDataEntity> createResultSetMapper()
             throws Exception {
-        final Class<? extends ResultSetMapper<ExtendedData>> resultSetMapperClass = ExtendedDataResultSetMapper.class;
-        final Constructor<? extends ResultSetMapper<ExtendedData>> resultSetMapperConstructor
+        final Class<? extends ResultSetMapper<ExtendedDataEntity>> resultSetMapperClass = ExtendedDataResultSetMapper.class;
+        final Constructor<? extends ResultSetMapper<ExtendedDataEntity>> resultSetMapperConstructor
                 = resultSetMapperClass.getDeclaredConstructor(ResultRowMapper.class);
         resultSetMapperConstructor.setAccessible(true);
         try {

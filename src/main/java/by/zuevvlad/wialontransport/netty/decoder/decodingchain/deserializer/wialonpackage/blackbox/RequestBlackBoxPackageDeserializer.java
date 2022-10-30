@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.wialonpackage.blackbox;
 
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component.ExtendedDataDeserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.wialonpackage.PackageDeserializer;
@@ -30,15 +30,15 @@ public final class RequestBlackBoxPackageDeserializer implements PackageDeserial
             + ".*;"                           //driverKeyCode
             + "(.+:[123]:.+,?)*";             //parameters
 
-    private final Deserializer<Data> dataDeserializer;
-    private final Deserializer<ExtendedData> extendedDataDeserializer;
+    private final Deserializer<DataEntity> dataDeserializer;
+    private final Deserializer<ExtendedDataEntity> extendedDataDeserializer;
 
     public static PackageDeserializer create() {
         return SingletonHolder.PACKAGE_DESERIALIZER;
     }
 
-    private RequestBlackBoxPackageDeserializer(final Deserializer<Data> dataDeserializer,
-                                               final Deserializer<ExtendedData> extendedDataDeserializer) {
+    private RequestBlackBoxPackageDeserializer(final Deserializer<DataEntity> dataDeserializer,
+                                               final Deserializer<ExtendedDataEntity> extendedDataDeserializer) {
         this.dataDeserializer = dataDeserializer;
         this.extendedDataDeserializer = extendedDataDeserializer;
     }
@@ -49,19 +49,19 @@ public final class RequestBlackBoxPackageDeserializer implements PackageDeserial
                 .replace(PACKAGE_DESCRIPTION_PREFIX, EMPTY_STRING)
                 .replace(PACKAGE_DESCRIPTION_POSTFIX, EMPTY_STRING);
         final String[] serializedAllData = message.split(SERIALIZED_DATA_DELIMITER);
-        final List<Data> data = this.deserializeData(serializedAllData);
-        final List<ExtendedData> extendedData = this.deserializeExtendedData(serializedAllData);
+        final List<DataEntity> data = this.deserializeData(serializedAllData);
+        final List<ExtendedDataEntity> extendedData = this.deserializeExtendedData(serializedAllData);
         return new RequestBlackBoxPackage(data, extendedData);
     }
 
-    private List<Data> deserializeData(final String[] serializedAllData) {
+    private List<DataEntity> deserializeData(final String[] serializedAllData) {
         return stream(serializedAllData)
                 .filter(serializedData -> serializedData.matches(REGEX_SERIALIZED_DATA))
                 .map(this.dataDeserializer::deserialize)
                 .collect(toList());
     }
 
-    private List<ExtendedData> deserializeExtendedData(final String[] serializedAllData) {
+    private List<ExtendedDataEntity> deserializeExtendedData(final String[] serializedAllData) {
         return stream(serializedAllData)
                 .filter(serializedData -> serializedData.matches(REGEX_SERIALIZED_EXTENDED_DATA))
                 .map(this.extendedDataDeserializer::deserialize)

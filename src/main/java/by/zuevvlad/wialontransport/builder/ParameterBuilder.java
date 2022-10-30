@@ -1,8 +1,8 @@
 package by.zuevvlad.wialontransport.builder;
 
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType.NOT_DEFINED;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType.NOT_DEFINED;
 
 public final class ParameterBuilder implements Builder<Parameter> {
     private static final String NOT_DEFINED_VALUE_NAME = "not defined";

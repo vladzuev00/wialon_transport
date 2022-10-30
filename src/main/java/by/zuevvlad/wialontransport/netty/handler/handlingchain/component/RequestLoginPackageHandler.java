@@ -32,6 +32,6 @@ public final class RequestLoginPackageHandler extends PackageHandler {
 
     private static final class SingletonHolder {
         private static final PackageHandler PACKAGE_ANSWERER = new RequestLoginPackageHandler(
-                RequestReducedDataPackageHandler.create(), AuthorizationDeviceServiceImplementation.create());
+                null, AuthorizationDeviceServiceImplementation.create());
     }
 }

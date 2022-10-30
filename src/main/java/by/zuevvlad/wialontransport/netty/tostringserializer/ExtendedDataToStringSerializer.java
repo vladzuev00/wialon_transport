@@ -1,8 +1,8 @@
 package by.zuevvlad.wialontransport.netty.tostringserializer;
 
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
-import by.zuevvlad.wialontransport.entity.ExtendedData.Parameter.ValueType;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity.Parameter.ValueType;
 import by.zuevvlad.wialontransport.propertyfilereader.PropertyFileReader;
 import by.zuevvlad.wialontransport.propertyfilereader.PropertyFileReaderImplementation;
 
@@ -11,24 +11,24 @@ import java.util.List;
 import java.util.Properties;
 
 import static java.lang.Double.compare;
-import static by.zuevvlad.wialontransport.entity.ExtendedData.*;
+import static by.zuevvlad.wialontransport.entity.ExtendedDataEntity.*;
 import static java.lang.String.join;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 
-public final class ExtendedDataToStringSerializer implements ToStringSerializer<ExtendedData> {
-    private final ToStringSerializer<Data> dataToStringSerializer;
+public final class ExtendedDataToStringSerializer implements ToStringSerializer<ExtendedDataEntity> {
+    private final ToStringSerializer<DataEntity> dataToStringSerializer;
     private final String serializedNotDefinedValue;
     private final String extendedDataComponentsDelimiter;
     private final String analogInputsDelimiter;
     private final String parameterComponentsDelimiter;
     private final String parametersDelimiter;
 
-    public static ToStringSerializer<ExtendedData> create() {
+    public static ToStringSerializer<ExtendedDataEntity> create() {
         return SingletonInitializer.EXTENDED_DATA_TO_STRING_SERIALIZER;
     }
 
-    private ExtendedDataToStringSerializer(final ToStringSerializer<Data> dataToStringSerializer,
+    private ExtendedDataToStringSerializer(final ToStringSerializer<DataEntity> dataToStringSerializer,
                                            final String serializedNotDefinedValue,
                                            final String extendedDataComponentsDelimiter,
                                            final String analogInputsDelimiter,
@@ -43,7 +43,7 @@ public final class ExtendedDataToStringSerializer implements ToStringSerializer<
     }
 
     @Override
-    public String serialize(final ExtendedData serializedExtendedData) {
+    public String serialize(final ExtendedDataEntity serializedExtendedData) {
         final String serializedAsData = this.dataToStringSerializer.serialize(serializedExtendedData);
         final String serializedReductionPrecision = this.findSerializedReductionPrecision(serializedExtendedData);
         final String serializedInputs = this.findSerializedInputs(serializedExtendedData);
@@ -56,42 +56,42 @@ public final class ExtendedDataToStringSerializer implements ToStringSerializer<
                 serializedParameters);
     }
 
-    private String findSerializedReductionPrecision(final ExtendedData serializedExtendedData) {
+    private String findSerializedReductionPrecision(final ExtendedDataEntity serializedExtendedData) {
         final double reductionPrecision = serializedExtendedData.getReductionPrecision();
         return compare(reductionPrecision, NOT_DEFINED_REDUCTION_PRECISION) != 0
                 ? Double.toString(reductionPrecision)
                 : this.serializedNotDefinedValue;
     }
 
-    private String findSerializedInputs(final ExtendedData serializedExtendedData) {
+    private String findSerializedInputs(final ExtendedDataEntity serializedExtendedData) {
         final int inputs = serializedExtendedData.getInputs();
         return inputs != NOT_DEFINED_INPUTS
                 ? Integer.toString(inputs)
                 : this.serializedNotDefinedValue;
     }
 
-    private String findSerializedOutputs(final ExtendedData serializedExtendedData) {
+    private String findSerializedOutputs(final ExtendedDataEntity serializedExtendedData) {
         final int outputs = serializedExtendedData.getOutputs();
         return outputs != NOT_DEFINED_OUTPUTS
                 ? Integer.toString(outputs)
                 : this.serializedNotDefinedValue;
     }
 
-    private String findSerializedAnalogInputs(final ExtendedData serializedExtendedData) {
+    private String findSerializedAnalogInputs(final ExtendedDataEntity serializedExtendedData) {
         final double[] analogInputs = serializedExtendedData.getAnalogInputs();
         return stream(analogInputs)
                 .mapToObj(Double::toString)
                 .collect(joining(this.analogInputsDelimiter));
     }
 
-    private String findSerializedDriverKeyCode(final ExtendedData serializedExtendedData) {
+    private String findSerializedDriverKeyCode(final ExtendedDataEntity serializedExtendedData) {
         final String driverKeyCode = serializedExtendedData.getDriverKeyCode();
         return !driverKeyCode.equals(NOT_DEFINED_DRIVER_KEY_CODE)
                 ? driverKeyCode
                 : this.serializedNotDefinedValue;
     }
 
-    private String findSerializedParameters(final ExtendedData serializedExtendedData) {
+    private String findSerializedParameters(final ExtendedDataEntity serializedExtendedData) {
         final List<Parameter> parameters = serializedExtendedData.getParameters();
         return parameters.stream()
                 .map(this::findSerializedParameter)
@@ -128,11 +128,11 @@ public final class ExtendedDataToStringSerializer implements ToStringSerializer<
         private static final String PROPERTY_KEY_SERIALIZED_PARAMETERS_DELIMITER
                 = "netty.serialization.extended_data.serialized_parameters_delimiter";
 
-        private static final ToStringSerializer<ExtendedData> EXTENDED_DATA_TO_STRING_SERIALIZER
+        private static final ToStringSerializer<ExtendedDataEntity> EXTENDED_DATA_TO_STRING_SERIALIZER
                 = createExtendedDataToStringSerializer();
 
-        private static ToStringSerializer<ExtendedData> createExtendedDataToStringSerializer() {
-            final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+        private static ToStringSerializer<ExtendedDataEntity> createExtendedDataToStringSerializer() {
+            final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
 
             final PropertyFileReader propertyFileReader = PropertyFileReaderImplementation.create();
             final Properties properties = propertyFileReader.read(FILE_NETTY_SERIALIZATION_CONFIGURATION);

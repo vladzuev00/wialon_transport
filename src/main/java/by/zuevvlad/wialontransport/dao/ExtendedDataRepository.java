@@ -8,17 +8,16 @@ import by.zuevvlad.wialontransport.dao.parameterinjector.entity.EntityInjectorIn
 import by.zuevvlad.wialontransport.dao.parameterinjector.entity.ExtendedDataInjectorInPreparedStatement;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.ExtendedDataResultSetMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.ResultSetMapper;
-import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ExtendedDataResultRowMapper;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
 import by.zuevvlad.wialontransport.dao.serializer.AnalogInputsSerializer;
 import by.zuevvlad.wialontransport.dao.serializer.ParametersSerializer;
-import by.zuevvlad.wialontransport.entity.ExtendedData;
+import by.zuevvlad.wialontransport.entity.ExtendedDataEntity;
 
 import java.util.logging.Logger;
 
 import static java.util.logging.Logger.getLogger;
 
-public final class ExtendedDataRepository extends AbstractEntityRepository<ExtendedData> {
+public final class ExtendedDataRepository extends AbstractEntityRepository<ExtendedDataEntity> {
     private static final String QUERY_TO_SELECT_BY_ID = "SELECT data.id, data.date, data.time, "
             + "data.latitude_degrees, data.latitude_minutes, data.latitude_minute_share, data.latitude_type, "
             + "data.longitude_degrees, data.longitude_minutes, data.longitude_minute_share, data.longitude_type, "
@@ -105,17 +104,17 @@ public final class ExtendedDataRepository extends AbstractEntityRepository<Exten
     private static final String QUERY_TO_DELETE = "DELETE FROM data WHERE data.id = ?";
 
     private ExtendedDataRepository(final DataBaseConnectionPool dataBaseConnectionPool,
-                                   final ResultRowMapper<ExtendedData> extendedDataResultRowMapper,
-                                   final ResultSetMapper<ExtendedData> extendedDataResultSetMapper,
+                                   final ResultRowMapper<ExtendedDataEntity> extendedDataResultRowMapper,
+                                   final ResultSetMapper<ExtendedDataEntity> extendedDataResultSetMapper,
                                    final FounderGeneratedId<Long> founderGeneratedId,
-                                   final EntityInjectorInPreparedStatement<ExtendedData> extendedDataInjectorToInsert,
-                                   final EntityInjectorInPreparedStatement<ExtendedData> extendedDataInjectorToUpdate,
+                                   final EntityInjectorInPreparedStatement<ExtendedDataEntity> extendedDataInjectorToInsert,
+                                   final EntityInjectorInPreparedStatement<ExtendedDataEntity> extendedDataInjectorToUpdate,
                                    final Logger logger) {
         super(dataBaseConnectionPool, extendedDataResultRowMapper, extendedDataResultSetMapper, founderGeneratedId,
                 extendedDataInjectorToInsert, extendedDataInjectorToUpdate, logger);
     }
 
-    public static EntityRepository<ExtendedData> create() {
+    public static EntityRepository<ExtendedDataEntity> create() {
         return SingletonHolder.EXTENDED_DATA_REPOSITORY;
     }
 
@@ -145,7 +144,7 @@ public final class ExtendedDataRepository extends AbstractEntityRepository<Exten
     }
 
     private static final class SingletonHolder {
-        private static final EntityInjectorInPreparedStatement<ExtendedData> EXTENDED_DATA_INJECTOR_TO_INSERT
+        private static final EntityInjectorInPreparedStatement<ExtendedDataEntity> EXTENDED_DATA_INJECTOR_TO_INSERT
                 = new ExtendedDataInjectorInPreparedStatement(
                 AnalogInputsSerializer.create(),
                 ParametersSerializer.create(),
@@ -172,7 +171,7 @@ public final class ExtendedDataRepository extends AbstractEntityRepository<Exten
                 PARAMETER_INDEX_PARAMETERS_IN_QUERY_TO_INSERT
         );
 
-        private static final EntityInjectorInPreparedStatement<ExtendedData> EXTENDED_DATA_INJECTOR_TO_UPDATE
+        private static final EntityInjectorInPreparedStatement<ExtendedDataEntity> EXTENDED_DATA_INJECTOR_TO_UPDATE
                 = new ExtendedDataInjectorInPreparedStatement(
                 AnalogInputsSerializer.create(),
                 ParametersSerializer.create(),
@@ -200,9 +199,10 @@ public final class ExtendedDataRepository extends AbstractEntityRepository<Exten
                 PARAMETER_INDEX_PARAMETERS_IN_QUERY_TO_UPDATE
         );
 
-        private static final EntityRepository<ExtendedData> EXTENDED_DATA_REPOSITORY = new ExtendedDataRepository(
+        private static final EntityRepository<ExtendedDataEntity> EXTENDED_DATA_REPOSITORY = new ExtendedDataRepository(
                 DataBaseConnectionPoolImplementation.create(),
-                ExtendedDataResultRowMapper.create(),
+                null,
+                //ExtendedDataResultRowMapper.create(),
                 ExtendedDataResultSetMapper.create(),
                 FounderGeneratedLongId.create(),
                 EXTENDED_DATA_INJECTOR_TO_INSERT,

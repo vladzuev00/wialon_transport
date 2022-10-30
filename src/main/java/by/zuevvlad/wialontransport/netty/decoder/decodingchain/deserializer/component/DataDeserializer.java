@@ -1,9 +1,9 @@
 package by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component;
 
 import by.zuevvlad.wialontransport.builder.entity.DataBuilder;
-import by.zuevvlad.wialontransport.entity.Data;
-import by.zuevvlad.wialontransport.entity.Data.Latitude;
-import by.zuevvlad.wialontransport.entity.Data.Longitude;
+import by.zuevvlad.wialontransport.entity.DataEntity;
+import by.zuevvlad.wialontransport.entity.DataEntity.Latitude;
+import by.zuevvlad.wialontransport.entity.DataEntity.Longitude;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.Deserializer;
 import by.zuevvlad.wialontransport.netty.decoder.decodingchain.deserializer.component.exception.*;
 
@@ -12,12 +12,12 @@ import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static by.zuevvlad.wialontransport.entity.Data.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.*;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
 import static java.util.regex.Pattern.compile;
 
-public final class DataDeserializer implements Deserializer<Data> {
+public final class DataDeserializer implements Deserializer<DataEntity> {
     private static final String REGEX_SERIALIZED_DATA
             = "((\\d{6}|(NA));(\\d{6}|(NA)));"   //date, time
             + "((\\d{4}\\.\\d+;[NS])|(NA;NA));"  //latitude
@@ -56,12 +56,12 @@ public final class DataDeserializer implements Deserializer<Data> {
         this.dataBuilderSupplier = dataBuilderSupplier;
     }
 
-    public static Deserializer<Data> create() {
+    public static Deserializer<DataEntity> create() {
         return SingletonHolder.DATA_DESERIALIZER;
     }
 
     @Override
-    public Data deserialize(final String deserialized) {
+    public DataEntity deserialize(final String deserialized) {
         final Matcher matcher = PATTERN_SERIALIZED_DATA.matcher(deserialized);
         if (!matcher.matches()) {
             throw new NotValidInboundSerializedDataException(
@@ -139,7 +139,7 @@ public final class DataDeserializer implements Deserializer<Data> {
     }
 
     private static final class SingletonHolder {
-        private static final Deserializer<Data> DATA_DESERIALIZER = new DataDeserializer(DateTimeDeserializer.create(),
+        private static final Deserializer<DataEntity> DATA_DESERIALIZER = new DataDeserializer(DateTimeDeserializer.create(),
                 LatitudeDeserializer.create(), LongitudeDeserializer.create(), DataBuilder::new);
     }
 }

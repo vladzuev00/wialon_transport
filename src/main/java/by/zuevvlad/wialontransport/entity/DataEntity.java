@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import static java.lang.Integer.MIN_VALUE;
 import static java.time.LocalDateTime.of;
 
-public class Data extends Entity {
+public class DataEntity extends Entity {
     public static final LocalDate NOT_DEFINED_DATE = LocalDate.MIN;
     public static final LocalTime NOT_DEFINED_TIME = LocalTime.MIN;
     private static final LocalDateTime NOT_DEFINED_DATE_TIME = of(NOT_DEFINED_DATE, NOT_DEFINED_TIME);
@@ -24,7 +24,7 @@ public class Data extends Entity {
     public static final int NOT_DEFINED_COURSE = MIN_VALUE;
     public static final int NOT_DEFINED_HEIGHT = MIN_VALUE;
     public static final int NOT_DEFINED_AMOUNT_SATELLITES = MIN_VALUE;
-    public static final Supplier<Tracker> NOT_DEFINED_TRACKER_SUPPLIER = Tracker::new;
+    public static final Supplier<TrackerEntity> NOT_DEFINED_TRACKER_SUPPLIER = TrackerEntity::new;
 
     private LocalDateTime dateTime;
     private Latitude latitude;
@@ -33,9 +33,9 @@ public class Data extends Entity {
     private int course;
     private int height;
     private int amountSatellites;
-    private Tracker tracker;
+    private TrackerEntity tracker;
 
-    public Data() {
+    public DataEntity() {
         this.dateTime = NOT_DEFINED_DATE_TIME;
         this.latitude = NOT_DEFINED_LATITUDE_SUPPLIER.get();
         this.longitude = NOT_DEFINED_LONGITUDE_SUPPLIER.get();
@@ -46,9 +46,9 @@ public class Data extends Entity {
         this.tracker = NOT_DEFINED_TRACKER_SUPPLIER.get();
     }
 
-    public Data(final long id, final LocalDateTime dateTime, final Latitude latitude, final Longitude longitude,
-                final int speed, final int course, final int height, final int amountSatellites,
-                final Tracker tracker) {
+    public DataEntity(final long id, final LocalDateTime dateTime, final Latitude latitude, final Longitude longitude,
+                      final int speed, final int course, final int height, final int amountSatellites,
+                      final TrackerEntity tracker) {
         super(id);
         this.dateTime = dateTime;
         this.latitude = latitude;
@@ -58,18 +58,6 @@ public class Data extends Entity {
         this.height = height;
         this.amountSatellites = amountSatellites;
         this.tracker = tracker;
-    }
-
-    public Data(final Data other) {
-        super(other.getId());
-        this.dateTime = other.dateTime;
-        this.latitude = new Latitude(other.latitude);
-        this.longitude = new Longitude(other.longitude);
-        this.speed = other.speed;
-        this.course = other.course;
-        this.height = other.height;
-        this.amountSatellites = other.amountSatellites;
-        this.tracker = other.tracker;
     }
 
     public void setDateTime(final LocalDateTime dateTime) {
@@ -128,11 +116,11 @@ public class Data extends Entity {
         return this.amountSatellites;
     }
 
-    public void setTracker(final Tracker tracker) {
+    public void setTracker(final TrackerEntity tracker) {
         this.tracker = tracker;
     }
 
-    public Tracker getTracker() {
+    public TrackerEntity getTracker() {
         return this.tracker;
     }
 
@@ -141,7 +129,7 @@ public class Data extends Entity {
         if (!super.equals(otherObject)) {
             return false;
         }
-        final Data other = (Data) otherObject;
+        final DataEntity other = (DataEntity) otherObject;
         return Objects.equals(this.dateTime, other.dateTime)
                 && Objects.equals(this.latitude, other.latitude)
                 && Objects.equals(this.longitude, other.longitude)
@@ -191,7 +179,7 @@ public class Data extends Entity {
         this.course = objectInput.readInt();
         this.height = objectInput.readInt();
         this.amountSatellites = objectInput.readInt();
-        this.tracker = (Tracker) objectInput.readObject();
+        this.tracker = (TrackerEntity) objectInput.readObject();
     }
 
     public static abstract class GeographicCoordinate implements Externalizable {

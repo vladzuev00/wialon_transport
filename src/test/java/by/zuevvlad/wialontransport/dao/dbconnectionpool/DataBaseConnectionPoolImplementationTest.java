@@ -54,11 +54,10 @@ public final class DataBaseConnectionPoolImplementationTest {
         when(this.mockedFutureAvailableConnections.get()).thenReturn(this.mockedAvailableConnections);
         when(this.mockedAvailableConnections.size()).thenReturn(INVOLVED_CONNECTIONS_AMOUNT);
 
-        try (final DataBaseConnectionPool dataBaseConnectionPool = this.createDataBaseConnectionPool(
-                this.mockedFutureAvailableConnections)) {
-            final int actual = dataBaseConnectionPool.findAmountOfAvailableConnections();
-            assertEquals(INVOLVED_CONNECTIONS_AMOUNT, actual);
-        }
+        final DataBaseConnectionPool dataBaseConnectionPool = this.createDataBaseConnectionPool(
+                this.mockedFutureAvailableConnections);
+        final int actual = dataBaseConnectionPool.findAmountOfAvailableConnections();
+        assertEquals(INVOLVED_CONNECTIONS_AMOUNT, actual);
 
         verify(this.mockedFutureAvailableConnections, times(1)).get();
         verify(this.mockedAvailableConnections, times(1)).size();
@@ -73,8 +72,9 @@ public final class DataBaseConnectionPoolImplementationTest {
                 = new DataBaseConnectionPoolFullingException(0);
         when(this.mockedExecutionException.getCause()).thenReturn(poolFullingException);
 
-        try (final DataBaseConnectionPool dataBaseConnectionPool = this.createDataBaseConnectionPool(
-                this.mockedFutureAvailableConnections)) {
+        final DataBaseConnectionPool dataBaseConnectionPool = this.createDataBaseConnectionPool(
+                this.mockedFutureAvailableConnections);
+        try {
             dataBaseConnectionPool.findAvailableConnection();
         } catch (final Exception exception) {
             assertSame(poolFullingException, exception);
@@ -88,10 +88,9 @@ public final class DataBaseConnectionPoolImplementationTest {
     public void amountOfAvailableConnectionShouldNotBeFoundBecauseOfInterruptedException()
             throws Exception {
         when(this.mockedFutureAvailableConnections.get()).thenThrow(InterruptedException.class);
-        try (final DataBaseConnectionPool dataBaseConnectionPool = this.createDataBaseConnectionPool(
-                this.mockedFutureAvailableConnections)) {
-            dataBaseConnectionPool.findAvailableConnection();
-        }
+        final DataBaseConnectionPool dataBaseConnectionPool = this.createDataBaseConnectionPool(
+                this.mockedFutureAvailableConnections);
+        dataBaseConnectionPool.findAvailableConnection();
 
         verify(this.mockedFutureAvailableConnections, times(1)).get();
     }

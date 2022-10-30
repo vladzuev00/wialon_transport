@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.dao.resultsetmapper;
 
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
-import by.zuevvlad.wialontransport.entity.Tracker;
+import by.zuevvlad.wialontransport.entity.TrackerEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.lang.reflect.Constructor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -23,10 +22,10 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public final class TrackerResultSetMapperTest {
-    private ResultSetMapper<Tracker> deviceResultSetMapper;
+    private ResultSetMapper<TrackerEntity> deviceResultSetMapper;
 
     @Mock
-    private ResultRowMapper<Tracker> mockedDeviceResultRowMapper;
+    private ResultRowMapper<TrackerEntity> mockedDeviceResultRowMapper;
 
     @Mock
     private ResultSet mockedResultSet;
@@ -43,7 +42,7 @@ public final class TrackerResultSetMapperTest {
     @Test
     public void singletonShouldBeLazyThreadSafe() {
         final int startedThreadAmount = 50;
-        final BlockingQueue<ResultSetMapper<Tracker>> createdSetMappers = new ArrayBlockingQueue<>(startedThreadAmount);
+        final BlockingQueue<ResultSetMapper<TrackerEntity>> createdSetMappers = new ArrayBlockingQueue<>(startedThreadAmount);
         rangeClosed(1, startedThreadAmount).forEach(i -> {
             final Thread startedThread = new Thread(() -> {
                 try {
@@ -104,11 +103,11 @@ public final class TrackerResultSetMapperTest {
         verify(this.mockedResultSet, times(1)).next();
     }
 
-    private static ResultSetMapper<Tracker> createDeviceResultSetMapper(
-            final ResultRowMapper<Tracker> deviceResultRowMapper)
+    private static ResultSetMapper<TrackerEntity> createDeviceResultSetMapper(
+            final ResultRowMapper<TrackerEntity> deviceResultRowMapper)
             throws Exception {
-        final Class<? extends ResultSetMapper<Tracker>> resultSetMapperClass = TrackerResultSetMapper.class;
-        final Constructor<? extends ResultSetMapper<Tracker>> resultSetMapperConstructor
+        final Class<? extends ResultSetMapper<TrackerEntity>> resultSetMapperClass = TrackerResultSetMapper.class;
+        final Constructor<? extends ResultSetMapper<TrackerEntity>> resultSetMapperConstructor
                 = resultSetMapperClass.getDeclaredConstructor(ResultRowMapper.class);
         resultSetMapperConstructor.setAccessible(true);
         try {

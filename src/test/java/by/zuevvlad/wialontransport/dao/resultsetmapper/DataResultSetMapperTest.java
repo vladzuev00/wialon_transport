@@ -5,7 +5,7 @@ import by.zuevvlad.wialontransport.builder.geographiccoordinate.LatitudeBuilder;
 import by.zuevvlad.wialontransport.builder.geographiccoordinate.LongitudeBuilder;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.exception.ResultSetMappingException;
 import by.zuevvlad.wialontransport.dao.resultsetmapper.resultrowmapper.ResultRowMapper;
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -21,8 +21,8 @@ import java.util.function.Supplier;
 
 import static java.time.LocalDateTime.now;
 import static java.util.List.of;
-import static by.zuevvlad.wialontransport.entity.Data.Latitude.Type.*;
-import static by.zuevvlad.wialontransport.entity.Data.Longitude.Type.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Latitude.Type.*;
+import static by.zuevvlad.wialontransport.entity.DataEntity.Longitude.Type.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.Assert.assertEquals;
@@ -37,7 +37,7 @@ public final class DataResultSetMapperTest {
     private final Supplier<DataBuilder> dataBuilderSupplier;
 
     @Mock
-    private ResultRowMapper<Data> mockedDataResultRowMapper;
+    private ResultRowMapper<DataEntity> mockedDataResultRowMapper;
 
     @Mock
     private ResultSet mockedResultSet;
@@ -58,7 +58,7 @@ public final class DataResultSetMapperTest {
         final LongitudeBuilder longitudeBuilder = this.longitudeBuilderSupplier.get();
         final DataBuilder dataBuilder = this.dataBuilderSupplier.get();
 
-        final List<Data> expected = of(
+        final List<DataEntity> expected = of(
                 dataBuilder
                         .catalogId(255)
                         .catalogDateTime(now())
@@ -107,8 +107,8 @@ public final class DataResultSetMapperTest {
                 .thenReturn(expected.get(0))
                 .thenReturn(expected.get(1));
 
-        final ResultSetMapper<Data> dataResultSetMapper = this.createDataResultSetMapper();
-        final List<Data> actual = dataResultSetMapper.map(this.mockedResultSet);
+        final ResultSetMapper<DataEntity> dataResultSetMapper = this.createDataResultSetMapper();
+        final List<DataEntity> actual = dataResultSetMapper.map(this.mockedResultSet);
         assertEquals(expected, actual);
 
         verify(this.mockedResultSet, times(3)).next();
@@ -122,8 +122,8 @@ public final class DataResultSetMapperTest {
     public void mappedDataListShouldBeEmpty()
             throws Exception {
         when(this.mockedResultSet.next()).thenReturn(false);
-        final ResultSetMapper<Data> dataResultSetMapper = this.createDataResultSetMapper();
-        final List<Data> mappedDataList = dataResultSetMapper.map(this.mockedResultSet);
+        final ResultSetMapper<DataEntity> dataResultSetMapper = this.createDataResultSetMapper();
+        final List<DataEntity> mappedDataList = dataResultSetMapper.map(this.mockedResultSet);
         assertTrue(mappedDataList.isEmpty());
 
         verify(this.mockedResultSet, times(1)).next();
@@ -133,16 +133,16 @@ public final class DataResultSetMapperTest {
     public void dataListShouldNotBeMappedBecauseOfSqlException()
             throws Exception {
         when(this.mockedResultSet.next()).thenThrow(SQLException.class);
-        final ResultSetMapper<Data> dataResultSetMapper = this.createDataResultSetMapper();
+        final ResultSetMapper<DataEntity> dataResultSetMapper = this.createDataResultSetMapper();
         dataResultSetMapper.map(this.mockedResultSet);
 
         verify(this.mockedResultSet, times(1)).next();
     }
 
-    private ResultSetMapper<Data> createDataResultSetMapper()
+    private ResultSetMapper<DataEntity> createDataResultSetMapper()
             throws Exception {
-        final Class<? extends ResultSetMapper<Data>> resultSetMapperClass = DataResultSetMapper.class;
-        final Constructor<? extends ResultSetMapper<Data>> resultSetMapperConstructor
+        final Class<? extends ResultSetMapper<DataEntity>> resultSetMapperClass = DataResultSetMapper.class;
+        final Constructor<? extends ResultSetMapper<DataEntity>> resultSetMapperConstructor
                 = resultSetMapperClass.getDeclaredConstructor(ResultRowMapper.class);
         resultSetMapperConstructor.setAccessible(true);
         try {

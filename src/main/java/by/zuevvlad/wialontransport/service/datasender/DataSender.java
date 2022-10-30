@@ -1,8 +1,8 @@
 package by.zuevvlad.wialontransport.service.datasender;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import org.apache.kafka.clients.producer.Callback;
 
 public interface DataSender {
-    void sendData(final Data sentData, final Callback callback);
+    void sendData(final DataEntity sentData, final Callback callback);
 }

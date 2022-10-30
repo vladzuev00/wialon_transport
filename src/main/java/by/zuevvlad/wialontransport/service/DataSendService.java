@@ -1,7 +1,7 @@
 package by.zuevvlad.wialontransport.service;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 
 public interface DataSendService {
-    void sendData(final Data sentData);
+    void sendData(final DataEntity sentData);
 }

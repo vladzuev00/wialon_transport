@@ -1,6 +1,6 @@
 package by.zuevvlad.wialontransport.netty.tostringserializer.collection;
 
-import by.zuevvlad.wialontransport.entity.Data;
+import by.zuevvlad.wialontransport.entity.DataEntity;
 import by.zuevvlad.wialontransport.netty.tostringserializer.DataToStringSerializer;
 import by.zuevvlad.wialontransport.netty.tostringserializer.ToStringSerializer;
 import by.zuevvlad.wialontransport.propertyfilereader.PropertyFileReader;
@@ -10,14 +10,14 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Properties;
 
-public final class CollectionDataToStringSerializer extends CollectionToStringSerializer<Data> {
+public final class CollectionDataToStringSerializer extends CollectionToStringSerializer<DataEntity> {
 
-    private CollectionDataToStringSerializer(final ToStringSerializer<Data> dataToStringSerializer,
+    private CollectionDataToStringSerializer(final ToStringSerializer<DataEntity> dataToStringSerializer,
                                              final String serializedDataDelimiter) {
         super(dataToStringSerializer, serializedDataDelimiter);
     }
 
-    public static ToStringSerializer<Collection<Data>> create() {
+    public static ToStringSerializer<Collection<DataEntity>> create() {
         return SingletonInitializer.COLLECTION_DATA_TO_STRING_SERIALIZER;
     }
 
@@ -29,14 +29,14 @@ public final class CollectionDataToStringSerializer extends CollectionToStringSe
         private static final String PROPERTY_KEY_SERIALIZED_DATA_DELIMITER
                 = "netty.serialization.black_box_package.serialized_data_delimiter";
 
-        private static final ToStringSerializer<Collection<Data>> COLLECTION_DATA_TO_STRING_SERIALIZER
+        private static final ToStringSerializer<Collection<DataEntity>> COLLECTION_DATA_TO_STRING_SERIALIZER
                 = createCollectionDataToStringSerializer();
 
-        private static ToStringSerializer<Collection<Data>> createCollectionDataToStringSerializer() {
+        private static ToStringSerializer<Collection<DataEntity>> createCollectionDataToStringSerializer() {
             final PropertyFileReader propertyFileReader = PropertyFileReaderImplementation.create();
             final Properties properties = propertyFileReader.read(FILE_NETTY_SERIALIZATION_CONFIGURATION);
             final String serializedDataDelimiter = properties.getProperty(PROPERTY_KEY_SERIALIZED_DATA_DELIMITER);
-            final ToStringSerializer<Data> dataToStringSerializer = DataToStringSerializer.create();
+            final ToStringSerializer<DataEntity> dataToStringSerializer = DataToStringSerializer.create();
             return new CollectionDataToStringSerializer(dataToStringSerializer, serializedDataDelimiter);
         }
     }
